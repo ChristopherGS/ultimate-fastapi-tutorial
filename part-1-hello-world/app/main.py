@@ -1,5 +1,7 @@
 from fastapi import FastAPI, APIRouter
 
+from typing import Optional
+
 
 RECIPES = [
     {'label': "Chicken Vesuvio",
@@ -28,12 +30,15 @@ def root() -> dict:
     return {"msg": "Hello, World!"}
 
 
-@api_router.get("/search", keyword: str = None, status_code=200)
-def search_recipes() -> dict:
+@api_router.get("/search/", status_code=200)
+def search_recipes(keyword: Optional[str] = None) -> dict:
     """
-    Search for recipes based on keyword
+    Search for recipes based on label keyword
     """
-    return {"msg": "Hello, World!"}
+
+    results = filter(
+        lambda recipe:  keyword.lower() in recipe['label'].lower(), RECIPES)
+    return {"results": list(results)}
 
 
 app.include_router(api_router)
