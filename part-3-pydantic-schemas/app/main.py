@@ -40,9 +40,9 @@ def search_recipes(
 
 
 @api_router.post("/recipe/", status_code=201, response_model=Recipe)
-def add_recipe(*, recipe_in: RecipeCreate) -> dict:
+def create_recipe(*, recipe_in: RecipeCreate) -> dict:
     """
-    Add a new recipe (in memory only)
+    Create a new recipe (in memory only)
     """
     recipe_entry = Recipe(
         label=recipe_in.label, source=recipe_in.source, url=recipe_in.url
