@@ -19,7 +19,23 @@ def root() -> dict:
     return {"msg": "Hello, World!"}
 
 
-# New addition, using the FastAPI parameter validation `Query` class
+# Updated using to use a response_model
+# https://fastapi.tiangolo.com/tutorial/response-model/
+@api_router.get("/recipe/{recipe_id}", status_code=200, response_model=Recipe)
+def fetch_recipe(
+    *,
+    recipe_id: int
+) -> dict:
+    """
+    Fetch a single recipe by ID
+    """
+
+    result = [recipe for recipe in RECIPES if recipe['id'] == recipe_id]
+    if result:
+        return result[0]
+
+
+# Updated using the FastAPI parameter validation `Query` class
 # # https://fastapi.tiangolo.com/tutorial/query-params-str-validations/
 @api_router.get("/search/", status_code=200, response_model=RecipeSearchResults)
 def search_recipes(
@@ -39,13 +55,19 @@ def search_recipes(
     return {"results": list(results)[:max_results]}
 
 
+# New addition, using Pydantic model `RecipeCreate` to define
+# the POST request body
 @api_router.post("/recipe/", status_code=201, response_model=Recipe)
 def create_recipe(*, recipe_in: RecipeCreate) -> dict:
     """
     Create a new recipe (in memory only)
     """
+    new_entry_id = len(RECIPES) + 1
     recipe_entry = Recipe(
-        label=recipe_in.label, source=recipe_in.source, url=recipe_in.url
+        id=new_entry_id,
+        label=recipe_in.label,
+        source=recipe_in.source,
+        url=recipe_in.url
     )
     RECIPES.append(recipe_entry.dict())
 
