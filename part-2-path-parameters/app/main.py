@@ -39,15 +39,12 @@ def root() -> dict:
 # New addition, path parameter
 # https://fastapi.tiangolo.com/tutorial/path-params/
 @api_router.get("/recipe/{recipe_id}", status_code=200)
-def fetch_recipe(
-    *,
-    recipe_id: int
-) -> dict:
+def fetch_recipe(*, recipe_id: int) -> dict:
     """
     Fetch a single recipe by ID
     """
 
-    result = [recipe for recipe in RECIPES if recipe['id'] == recipe_id]
+    result = [recipe for recipe in RECIPES if recipe["id"] == recipe_id]
     if result:
         return result[0]
 
