@@ -11,3 +11,5 @@ fastapi = "~0.58.1"
 python-multipart = "~0.0.5"
 pydantic = {extras = ["email"], version = "~1.4"}
 Jinja2 = "^3.0.1"
+SQLAlchemy = "^1.4.19"
+alembic = "^1.6.5"
