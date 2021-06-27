@@ -22,15 +22,12 @@ def root() -> dict:
 # Updated using to use a response_model
 # https://fastapi.tiangolo.com/tutorial/response-model/
 @api_router.get("/recipe/{recipe_id}", status_code=200, response_model=Recipe)
-def fetch_recipe(
-    *,
-    recipe_id: int
-) -> dict:
+def fetch_recipe(*, recipe_id: int) -> dict:
     """
     Fetch a single recipe by ID
     """
 
-    result = [recipe for recipe in RECIPES if recipe['id'] == recipe_id]
+    result = [recipe for recipe in RECIPES if recipe["id"] == recipe_id]
     if result:
         return result[0]
 
@@ -67,7 +64,7 @@ def create_recipe(*, recipe_in: RecipeCreate) -> dict:
         id=new_entry_id,
         label=recipe_in.label,
         source=recipe_in.source,
-        url=recipe_in.url
+        url=recipe_in.url,
     )
     RECIPES.append(recipe_entry.dict())
 

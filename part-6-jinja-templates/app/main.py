@@ -9,9 +9,7 @@ from app.recipe_data import RECIPES
 
 
 BASE_PATH = Path(__file__).resolve().parent
-TEMPLATES = Jinja2Templates(
-    directory=str(BASE_PATH / "templates")
-)
+TEMPLATES = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 
 
 app = FastAPI(title="Recipe API", openapi_url="/openapi.json")
@@ -34,31 +32,27 @@ def root(request: Request) -> dict:
 
 
 @api_router.get("/recipe/{recipe_id}", status_code=200, response_model=Recipe)
-def fetch_recipe(
-    *,
-    recipe_id: int
-) -> Any:
+def fetch_recipe(*, recipe_id: int) -> Any:
     """
     Fetch a single recipe by ID
     """
 
-    result = [recipe for recipe in RECIPES if recipe['id'] == recipe_id]
+    result = [recipe for recipe in RECIPES if recipe["id"] == recipe_id]
     if not result:
         # the exception is raised, not returned - you will get a validation
         # error otherwise.
         raise HTTPException(
-            status_code=404,
-            detail=f"Recipe with ID {recipe_id} not found")
+            status_code=404, detail=f"Recipe with ID {recipe_id} not found"
+        )
 
     return result[0]
-
 
 
 @api_router.get("/search/", status_code=200, response_model=RecipeSearchResults)
 def search_recipes(
     *,
     keyword: Optional[str] = Query(None, min_length=3, example="chicken"),
-    max_results: Optional[int] = 10
+    max_results: Optional[int] = 10,
 ) -> dict:
     """
     Search for recipes based on label keyword
@@ -82,7 +76,7 @@ def create_recipe(*, recipe_in: RecipeCreate) -> dict:
         id=new_entry_id,
         label=recipe_in.label,
         source=recipe_in.source,
-        url=recipe_in.url
+        url=recipe_in.url,
     )
     RECIPES.append(recipe_entry.dict())
 
