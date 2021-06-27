@@ -4,6 +4,7 @@ from typing import Sequence
 
 
 class Recipe(BaseModel):
+    id: int
     label: str
     source: str
     url: HttpUrl
