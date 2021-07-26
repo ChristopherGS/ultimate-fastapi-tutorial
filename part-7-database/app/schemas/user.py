@@ -9,6 +9,7 @@ class UserBase(BaseModel):
     email: Optional[EmailStr] = None
     is_superuser: bool = False
 
+
 # Properties to receive via API on creation
 class UserCreate(UserBase):
     email: EmailStr

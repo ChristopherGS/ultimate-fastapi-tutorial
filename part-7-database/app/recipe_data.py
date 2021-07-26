@@ -15,6 +15,6 @@ RECIPES = [
         "id": 3,
         "label": "Cauliflower and Tofu Curry Recipe",
         "source": "Serious Eats",
-        "url": "http://www.seriouseats.com/recipes/2011/02/cauliflower-and-tofu-curry-recipe.html",
+        "url": "http://www.seriouseats.com/recipes/2011/02/cauliflower-and-tofu-curry-recipe.html",  # noqa
     },
 ]

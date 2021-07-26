@@ -7,9 +7,7 @@ from app.schemas.recipe import RecipeCreate, RecipeUpdate
 
 
 class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
-    def create_with_submitter(
-            self, db: Session, *, obj_in: RecipeCreate
-    ) -> Recipe:
+    def create_with_submitter(self, db: Session, *, obj_in: RecipeCreate) -> Recipe:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data)
         db.add(db_obj)

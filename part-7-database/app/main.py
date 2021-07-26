@@ -62,7 +62,7 @@ def search_recipes(
     *,
     keyword: Optional[str] = Query(None, min_length=3, example="chicken"),
     max_results: Optional[int] = 10,
-    db: Session = Depends(deps.get_db)
+    db: Session = Depends(deps.get_db),
 ) -> dict:
     """
     Search for recipes based on label keyword
@@ -77,9 +77,7 @@ def search_recipes(
 
 @api_router.post("/recipe/", status_code=201, response_model=Recipe)
 def create_recipe(
-    *,
-    recipe_in: RecipeCreate,
-    db: Session = Depends(deps.get_db)
+    *, recipe_in: RecipeCreate, db: Session = Depends(deps.get_db)
 ) -> dict:
     """
     Create a new recipe (in memory only)

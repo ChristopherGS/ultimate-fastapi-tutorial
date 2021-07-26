@@ -7,7 +7,7 @@ from app.recipe_data import RECIPES
 
 logger = logging.getLogger(__name__)
 
-FIRST_SUPERUSER = 'admin@recipeapi.com'
+FIRST_SUPERUSER = "admin@recipeapi.com"
 
 # make sure all SQL Alchemy models are imported (app.db.base) before initializing DB
 # otherwise, SQL Alchemy might fail to initialize relationships properly
@@ -36,14 +36,12 @@ def init_db(db: Session) -> None:
         if not user.recipes:
             for recipe in RECIPES:
                 recipe_in = schemas.RecipeCreate(
-                    label=recipe['label'],
-                    source=recipe['source'],
-                    url=recipe['url'],
-                    submitter_id=user.id
+                    label=recipe["label"],
+                    source=recipe["source"],
+                    url=recipe["url"],
+                    submitter_id=user.id,
                 )
-                crud.recipe.create_with_submitter(
-                    db, obj_in=recipe_in
-                )
+                crud.recipe.create_with_submitter(db, obj_in=recipe_in)
     else:
         logger.warning(
             "Skipping creating superuser.  FIRST_SUPERUSER needs to be "
