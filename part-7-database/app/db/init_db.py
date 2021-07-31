@@ -41,7 +41,7 @@ def init_db(db: Session) -> None:
                     url=recipe["url"],
                     submitter_id=user.id,
                 )
-                crud.recipe.create_with_submitter(db, obj_in=recipe_in)
+                crud.recipe.create(db, obj_in=recipe_in)
     else:
         logger.warning(
             "Skipping creating superuser.  FIRST_SUPERUSER needs to be "
