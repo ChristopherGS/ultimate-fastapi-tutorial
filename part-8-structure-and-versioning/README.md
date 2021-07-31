@@ -1,4 +1,4 @@
-## Part 7 Local Setup
+## Part 8 Local Setup
 
 1. `pip install poetry`
 2. Install dependencies `cd` into the directory where the `pyproject.toml` is located then `poetry install`
