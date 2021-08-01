@@ -3,7 +3,6 @@ from pathlib import Path
 from fastapi import FastAPI, APIRouter, Request, Depends
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from starlette.middleware.cors import CORSMiddleware
 
 from app import crud
 from app.api import deps
@@ -31,16 +30,6 @@ def root(
         {"request": request, "recipes": recipes},
     )
 
-
-# Set all CORS enabled origins
-if settings.BACKEND_CORS_ORIGINS:
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 app.include_router(root_router)
