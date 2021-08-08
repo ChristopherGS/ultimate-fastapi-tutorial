@@ -2,10 +2,7 @@ from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-from sqlalchemy.future import select
 from sqlalchemy.orm import Session
-from sqlalchemy.ext.asyncio import AsyncSession
-
 
 from app.db.base_class import Base
 
@@ -31,12 +28,6 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self, db: Session, *, skip: int = 0, limit: int = 5000
     ) -> List[ModelType]:
         return db.query(self.model).order_by(self.model.id).offset(skip).limit(limit).all()
-
-    async def get_multi_async(
-            self, db: AsyncSession, *, skip: int = 0, limit: int = 5000
-    ) -> List[ModelType]:
-        result = await db.execute(select(self.model).order_by(self.model.id).offset(skip).limit(limit))
-        return result
 
     def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)

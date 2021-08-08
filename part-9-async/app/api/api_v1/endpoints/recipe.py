@@ -1,12 +1,13 @@
+import asyncio
+from typing import Any, Optional
+
+import httpx
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from sqlalchemy.future import select
-from typing import Any, Optional
 
 from app import crud
 from app.api import deps
 from app.schemas.recipe import Recipe, RecipeCreate, RecipeSearchResults
-from app.models.recipe import Recipe as RecipeModel
 
 router = APIRouter()
 
@@ -35,34 +36,16 @@ def fetch_recipe(
 def search_recipes(
     *,
     keyword: str = Query(None, min_length=3, example="chicken"),
-    max_results: Optional[int] = 100,
+    max_results: Optional[int] = 10,
     db: Session = Depends(deps.get_db),
 ) -> dict:
     """
     Search for recipes based on label keyword
     """
-    recipes = crud.recipe.get_multi(db=db)
+    recipes = crud.recipe.get_multi(db=db, limit=max_results)
     results = filter(lambda recipe: keyword.lower() in recipe.label.lower(), recipes)
-    users = crud.user.get_multi(db=db)
 
-    return {"results": list(results)[:100], "users": list(users)[:max_results]}
-
-
-@router.get("/search/async", status_code=200, response_model=RecipeSearchResults)
-async def search_recipes(
-        *,
-        keyword: str = Query(None, min_length=3, example="chicken"),
-        max_results: Optional[int] = 100,
-        db: Session = Depends(deps.get_db_async),
-) -> dict:
-    """
-    Search for recipes based on label keyword
-    """
-    recipes = await crud.recipe.get_multi_async(db)
-    results = filter(lambda recipe: keyword.lower() in recipe.label.lower(), recipes.scalars().all())
-    users = await crud.user.get_multi_async(db=db)
-
-    return {"results": list(results)[:100], "users": list(users.scalars().all())[:max_results]}
+    return {"results": list(results)}
 
 
 @router.post("/", status_code=201, response_model=Recipe)
@@ -75,3 +58,58 @@ def create_recipe(
     recipe = crud.recipe.create(db=db, obj_in=recipe_in)
 
     return recipe
+
+
+async def get_reddit_top_async(subreddit: str, data: dict) -> None:
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f'https://www.reddit.com/r/{subreddit}/top.json?sort=top&t=day&limit=5',
+            headers = {'User-agent': 'recipe bot 0.1'}
+        )
+
+    subreddit_recipes = response.json()
+    subreddit_data = []
+    for entry in subreddit_recipes['data']['children']:
+        score = entry['data']['score']
+        title = entry['data']['title']
+        link = entry['data']['url']
+        subreddit_data.append(f'{str(score)}: {title} ({link})')
+    data[subreddit] = subreddit_data
+
+
+def get_reddit_top(subreddit: str, data: dict) -> None:
+    response = httpx.get(
+        f'https://www.reddit.com/r/{subreddit}/top.json?sort=top&t=day&limit=5',
+        headers = {'User-agent': 'recipe bot 0.1'}
+    )
+    subreddit_recipes = response.json()
+    subreddit_data = []
+    for entry in subreddit_recipes['data']['children']:
+        score = entry['data']['score']
+        title = entry['data']['title']
+        link = entry['data']['url']
+        subreddit_data.append(f'{str(score)}: {title} ({link})')
+    data[subreddit] = subreddit_data
+
+
+@router.get("/ideas/async")
+async def get_reddit_data_api_async() -> dict:
+    data: dict = {}
+
+    await asyncio.gather(
+        get_reddit_top_async('recipes', data),
+        get_reddit_top_async('easyrecipes', data),
+        get_reddit_top_async('TopSecretRecipes', data)
+    )
+
+    return data
+
+
+@router.get("/ideas/")
+def get_reddit_data_api() -> dict:
+    data: dict = {}
+    get_reddit_top('recipes', data)
+    get_reddit_top('easyrecipes', data)
+    get_reddit_top('TopSecretRecipes', data)
+
+    return data

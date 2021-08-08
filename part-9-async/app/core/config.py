@@ -17,7 +17,6 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    SQLALCHEMY_DATABASE_URI_ASYNC: Optional[str] = "sqlite+aiosqlite:///example.db"
     SQLALCHEMY_DATABASE_URI: Optional[str] = "sqlite:///example.db"
     FIRST_SUPERUSER: EmailStr = "admin@recipeapi.com"
 

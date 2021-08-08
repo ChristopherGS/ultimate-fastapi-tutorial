@@ -43,4 +43,3 @@ class RecipeInDB(RecipeInDBBase):
 
 class RecipeSearchResults(BaseModel):
     results: Sequence[Recipe]
-    users: Sequence[User]
