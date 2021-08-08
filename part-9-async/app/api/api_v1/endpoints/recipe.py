@@ -93,7 +93,7 @@ def get_reddit_top(subreddit: str, data: dict) -> None:
 
 
 @router.get("/ideas/async")
-async def get_reddit_data_api_async() -> dict:
+async def fetch_ideas_async() -> dict:
     data: dict = {}
 
     await asyncio.gather(
@@ -106,7 +106,7 @@ async def get_reddit_data_api_async() -> dict:
 
 
 @router.get("/ideas/")
-def get_reddit_data_api() -> dict:
+def fetch_ideas() -> dict:
     data: dict = {}
     get_reddit_top("recipes", data)
     get_reddit_top("easyrecipes", data)
