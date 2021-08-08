@@ -2,8 +2,6 @@ from pydantic import BaseModel, HttpUrl
 
 from typing import Sequence
 
-from app.schemas.user import User
-
 
 class RecipeBase(BaseModel):
     label: str

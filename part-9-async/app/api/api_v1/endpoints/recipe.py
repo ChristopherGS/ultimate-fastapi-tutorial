@@ -63,32 +63,32 @@ def create_recipe(
 async def get_reddit_top_async(subreddit: str, data: dict) -> None:
     async with httpx.AsyncClient() as client:
         response = await client.get(
-            f'https://www.reddit.com/r/{subreddit}/top.json?sort=top&t=day&limit=5',
-            headers = {'User-agent': 'recipe bot 0.1'}
+            f"https://www.reddit.com/r/{subreddit}/top.json?sort=top&t=day&limit=5",
+            headers={"User-agent": "recipe bot 0.1"},
         )
 
     subreddit_recipes = response.json()
     subreddit_data = []
-    for entry in subreddit_recipes['data']['children']:
-        score = entry['data']['score']
-        title = entry['data']['title']
-        link = entry['data']['url']
-        subreddit_data.append(f'{str(score)}: {title} ({link})')
+    for entry in subreddit_recipes["data"]["children"]:
+        score = entry["data"]["score"]
+        title = entry["data"]["title"]
+        link = entry["data"]["url"]
+        subreddit_data.append(f"{str(score)}: {title} ({link})")
     data[subreddit] = subreddit_data
 
 
 def get_reddit_top(subreddit: str, data: dict) -> None:
     response = httpx.get(
-        f'https://www.reddit.com/r/{subreddit}/top.json?sort=top&t=day&limit=5',
-        headers = {'User-agent': 'recipe bot 0.1'}
+        f"https://www.reddit.com/r/{subreddit}/top.json?sort=top&t=day&limit=5",
+        headers={"User-agent": "recipe bot 0.1"},
     )
     subreddit_recipes = response.json()
     subreddit_data = []
-    for entry in subreddit_recipes['data']['children']:
-        score = entry['data']['score']
-        title = entry['data']['title']
-        link = entry['data']['url']
-        subreddit_data.append(f'{str(score)}: {title} ({link})')
+    for entry in subreddit_recipes["data"]["children"]:
+        score = entry["data"]["score"]
+        title = entry["data"]["title"]
+        link = entry["data"]["url"]
+        subreddit_data.append(f"{str(score)}: {title} ({link})")
     data[subreddit] = subreddit_data
 
 
@@ -97,9 +97,9 @@ async def get_reddit_data_api_async() -> dict:
     data: dict = {}
 
     await asyncio.gather(
-        get_reddit_top_async('recipes', data),
-        get_reddit_top_async('easyrecipes', data),
-        get_reddit_top_async('TopSecretRecipes', data)
+        get_reddit_top_async("recipes", data),
+        get_reddit_top_async("easyrecipes", data),
+        get_reddit_top_async("TopSecretRecipes", data),
     )
 
     return data
@@ -108,8 +108,8 @@ async def get_reddit_data_api_async() -> dict:
 @router.get("/ideas/")
 def get_reddit_data_api() -> dict:
     data: dict = {}
-    get_reddit_top('recipes', data)
-    get_reddit_top('easyrecipes', data)
-    get_reddit_top('TopSecretRecipes', data)
+    get_reddit_top("recipes", data)
+    get_reddit_top("easyrecipes", data)
+    get_reddit_top("TopSecretRecipes", data)
 
     return data
