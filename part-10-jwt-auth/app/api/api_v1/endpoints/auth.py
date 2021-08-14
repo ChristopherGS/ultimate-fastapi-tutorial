@@ -17,9 +17,13 @@ router = APIRouter()
 
 
 @router.post("/login")
-async def login(
+def login(
     db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()
 ) -> Any:
+    """
+    Get the JWT for a user with data from OAuth2 request form body.
+    """
+
     user = authenticate(email=form_data.username, password=form_data.password, db=db)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
@@ -31,7 +35,11 @@ async def login(
 
 
 @router.get("/me", response_model=schemas.User)
-async def read_users_me(current_user: User = Depends(deps.get_current_user)):
+def read_users_me(current_user: User = Depends(deps.get_current_user)):
+    """
+    Fetch the current logged in user.
+    """
+
     user = current_user
     return user
 
