@@ -53,7 +53,7 @@ def create_recipe(
     *, recipe_in: RecipeCreate, db: Session = Depends(deps.get_db)
 ) -> dict:
     """
-    Create a new recipe (in memory only)
+    Create a new recipe in the database.
     """
     recipe = crud.recipe.create(db=db, obj_in=recipe_in)
 
