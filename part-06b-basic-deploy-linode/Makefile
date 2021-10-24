@@ -13,4 +13,4 @@ linode_install:
 	sudo nginx -s reload
 
 linode_run:
-	gunicorn -w 2 -k uvicorn.workers.UvicornWorker
+	poetry run gunicorn -w 2 -k uvicorn.workers.UvicornWorker app.main:app
