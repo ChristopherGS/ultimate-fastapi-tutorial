@@ -1,4 +1,15 @@
-linode_run:
-	cd part-6b-basic-deploy
+linode_install:
+	sudo apt update
+	sudo apt -y upgrade
+	sudo apt -y install python3-pip
+	pip install poetry
 	poetry install
-	sudo vim /etc/nginx/sites-available/myapp
+	sudo apt -y install nginx
+	sudo cp nginx/default.conf /etc/nginx/sites-available/fastapi_app
+	# Disable the NGINX’s default configuration file by removing its symlink
+	sudo unlink /etc/nginx/sites-enabled/default
+	# Reload the NGINX configuration file:
+	sudo nginx -s reload
+
+linode_run: linode_install
+	poetry run ./run.sh
