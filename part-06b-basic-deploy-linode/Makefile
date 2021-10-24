@@ -11,7 +11,7 @@ linode_install:
 	sudo unlink /etc/nginx/sites-enabled/default
 	sudo ln -s /etc/nginx/sites-available/fastapi_app /etc/nginx/sites-enabled/
 
-linode_run_foreground:
+linode_run:
 	# Reload the NGINX configuration file:
 	sudo nginx -s reload
 	# restart the Nginx service
@@ -21,15 +21,3 @@ linode_run_foreground:
 	# Uvicorn. Note that when doing this you will need run Uvicorn with --forwarded-allow-ips='*'
 	# to ensure that the domain socket is trusted as a source from which to proxy headers.
 	poetry run gunicorn --bind=unix:///tmp/uvicorn.sock -w 2 --forwarded-allow-ips='*' -k uvicorn.workers.UvicornWorker app.main:app
-
-linode_run_background:
-	# Reload the NGINX configuration file:
-	sudo nginx -s reload
-	# restart the Nginx service
-	sudo systemctl restart nginx.service
-	sudo apt install supervisor
-	sudo cp fastapi_app.conf /etc/supervisor/conf.d/fastapi_app.conf
-	sudo mkdir /var/log/fastapi_app
-	sudo touch /var/log/fastapi_app/fastapi_app.out.log
-	sudo touch /var/log/fastapi_app/fastapi_app.err.log
-	sudo supervisorctl reload
