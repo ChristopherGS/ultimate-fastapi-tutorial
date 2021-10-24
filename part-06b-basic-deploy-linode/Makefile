@@ -1,5 +1,6 @@
 linode_install:
-	sudo apt update
+	# sudo apt update
+	# sudo apt install make
 	sudo apt -y upgrade
 	sudo apt -y install python3-pip
 	pip install poetry
@@ -11,5 +12,5 @@ linode_install:
 	# Reload the NGINX configuration file:
 	sudo nginx -s reload
 
-linode_run: linode_install
+linode_run:
 	poetry run ./run.sh
