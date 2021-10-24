@@ -20,4 +20,4 @@ linode_run:
 	# socket between Nginx and whatever the process manager that is being used to run
 	# Uvicorn. Note that when doing this you will need run Uvicorn with --forwarded-allow-ips='*'
 	# to ensure that the domain socket is trusted as a source from which to proxy headers.
-	poetry run gunicorn -w 2 -k uvicorn.workers.UvicornWorker --forwarded-allow-ips='*' app.main:app
+	poetry run gunicorn -w 2 -b '0.0.0.0:80' --forwarded-allow-ips='*' -k uvicorn.workers.UvicornWorker app.main:app
