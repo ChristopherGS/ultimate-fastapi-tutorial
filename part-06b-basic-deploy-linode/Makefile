@@ -31,5 +31,5 @@ linode_run_background:
 	sudo cp fastapi_app.conf /etc/supervisor/conf.d/fastapi_app.conf
 	sudo mkdir /var/log/fastapi_app
 	sudo touch /var/log/fastapi_app/fastapi_app.out.log
-    sudo touch /var/log/fastapi_app/fastapi_app.err.log
-    sudo supervisorctl reload
+	sudo touch /var/log/fastapi_app/fastapi_app.err.log
+	sudo supervisorctl reload
