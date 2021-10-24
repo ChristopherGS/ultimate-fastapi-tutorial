@@ -7,6 +7,8 @@ linode_install:
 	poetry install
 	sudo apt -y install nginx
 	sudo cp nginx/default.conf /etc/nginx/sites-available/fastapi_app
+	# Disable or delete the default Welcome to NGINX page:
+	sudo mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.disabled
 	# Disable the NGINX’s default configuration file by removing its symlink
 	sudo unlink /etc/nginx/sites-enabled/default
 	# Reload the NGINX configuration file:
