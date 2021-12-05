@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app import crud
 from app.api import deps
+from app.clients.reddit import RedditClient
 from app.schemas.recipe import Recipe, RecipeCreate, RecipeSearchResults, RecipeUpdateRestricted
 from app.models.user import User
 
@@ -104,23 +105,10 @@ async def get_reddit_top_async(subreddit: str, data: dict) -> None:
     data[subreddit] = subreddit_data
 
 
-def get_reddit_top(subreddit: str, data: dict) -> None:
-    response = httpx.get(
-        f"https://www.reddit.com/r/{subreddit}/top.json?sort=top&t=day&limit=5",
-        headers={"User-agent": "recipe bot 0.1"},
-    )
-    subreddit_recipes = response.json()
-    subreddit_data = []
-    for entry in subreddit_recipes["data"]["children"]:
-        score = entry["data"]["score"]
-        title = entry["data"]["title"]
-        link = entry["data"]["url"]
-        subreddit_data.append(f"{str(score)}: {title} ({link})")
-    data[subreddit] = subreddit_data
-
-
 @router.get("/ideas/async")
-async def fetch_ideas_async() -> dict:
+async def fetch_ideas_async(
+    user: User = Depends(deps.get_current_active_superuser)
+) -> dict:
     data: dict = {}
 
     await asyncio.gather(
@@ -133,10 +121,12 @@ async def fetch_ideas_async() -> dict:
 
 
 @router.get("/ideas/")
-def fetch_ideas() -> dict:
+def fetch_ideas(
+    reddit_client: RedditClient = Depends(deps.get_reddit_client)
+) -> dict:
     data: dict = {}
-    get_reddit_top("recipes", data)
-    get_reddit_top("easyrecipes", data)
-    get_reddit_top("TopSecretRecipes", data)
+    reddit_client.get_reddit_top(subreddit="recipes", data=data)
+    reddit_client.get_reddit_top(subreddit="easyrecipes", data=data)
+    reddit_client.get_reddit_top(subreddit="TopSecretRecipes", data=data)
 
     return data
