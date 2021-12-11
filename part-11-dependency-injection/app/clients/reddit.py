@@ -37,10 +37,11 @@ class RedditClient:
             )
         return res
 
-    def get_reddit_top(self, *, subreddit: str, data: dict, limit=5) -> dict:
+    def get_reddit_top(self, *, subreddit: str, limit=5) -> dict:
         """Fetch the top n entries from a given subreddit."""
 
-        url = f'/r/{subreddit}/top.json?sort=top&t=day&limit={limit}'
+        # If you get empty responses from the subreddit calls, set t=month instead.
+        url = f'/r/{subreddit}/top.json?sort=top&t=week&limit={limit}'
         response = self._perform_request('get', url)
         subreddit_recipes = response.json()
         subreddit_data = []
@@ -49,6 +50,5 @@ class RedditClient:
             title = entry["data"]["title"]
             link = entry["data"]["url"]
             subreddit_data.append(f"{str(score)}: {title} ({link})")
-        data[subreddit] = subreddit_data
 
-        return data
+        return subreddit_data

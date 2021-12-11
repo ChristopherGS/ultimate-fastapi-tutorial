@@ -125,8 +125,8 @@ def fetch_ideas(
     reddit_client: RedditClient = Depends(deps.get_reddit_client)
 ) -> dict:
     data: dict = {}
-    reddit_client.get_reddit_top(subreddit="recipes", data=data)
-    reddit_client.get_reddit_top(subreddit="easyrecipes", data=data)
-    reddit_client.get_reddit_top(subreddit="TopSecretRecipes", data=data)
+    for subreddit in ['recipes', 'easyrecipes', 'TopSecretRecipes']:
+        entry = reddit_client.get_reddit_top(subreddit=subreddit)
+        data[subreddit] = entry
 
     return data

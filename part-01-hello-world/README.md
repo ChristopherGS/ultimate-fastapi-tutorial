@@ -4,3 +4,5 @@
 2. Install dependencies `cd` into the directory where the `pyproject.toml` is located then `poetry install`
 3. Run the FastAPI server via poetry `poetry run ./run.sh`
 4. Open http://localhost:8001/
+
+If you get stuck, checkout the [troubleshooting readme](../troubleshooting/README.md)
