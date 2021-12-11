@@ -8,7 +8,12 @@ from sqlalchemy.orm import Session
 from app import crud
 from app.api import deps
 from app.clients.reddit import RedditClient
-from app.schemas.recipe import Recipe, RecipeCreate, RecipeSearchResults, RecipeUpdateRestricted
+from app.schemas.recipe import (
+    Recipe,
+    RecipeCreate,
+    RecipeSearchResults,
+    RecipeUpdateRestricted,
+)
 from app.models.user import User
 
 router = APIRouter()
@@ -55,13 +60,15 @@ def create_recipe(
     *,
     recipe_in: RecipeCreate,
     db: Session = Depends(deps.get_db),
-    current_user: User = Depends(deps.get_current_user)
+    current_user: User = Depends(deps.get_current_user),
 ) -> dict:
     """
     Create a new recipe in the database.
     """
     if recipe_in.submitter_id != current_user.id:
-        raise HTTPException(status_code=403, detail=f"You can only submit recipes as yourself")
+        raise HTTPException(
+            status_code=403, detail=f"You can only submit recipes as yourself"
+        )
     recipe = crud.recipe.create(db=db, obj_in=recipe_in)
 
     return recipe
@@ -69,20 +76,24 @@ def create_recipe(
 
 @router.put("/", status_code=201, response_model=Recipe)
 def update_recipe(
-        *,
-        recipe_in: RecipeUpdateRestricted,
-        db: Session = Depends(deps.get_db),
-        current_user: User = Depends(deps.get_current_user)
+    *,
+    recipe_in: RecipeUpdateRestricted,
+    db: Session = Depends(deps.get_db),
+    current_user: User = Depends(deps.get_current_user),
 ) -> dict:
     """
     Update recipe in the database.
     """
     recipe = crud.recipe.get(db, id=recipe_in.id)
     if not recipe:
-        raise HTTPException(status_code=400, detail=f"Recipe with ID: {recipe_in.id} not found.")
+        raise HTTPException(
+            status_code=400, detail=f"Recipe with ID: {recipe_in.id} not found."
+        )
 
     if recipe.submitter_id != current_user.id:
-        raise HTTPException(status_code=403, detail=f"You can only update your recipes.")
+        raise HTTPException(
+            status_code=403, detail=f"You can only update your recipes."
+        )
 
     updated_recipe = crud.recipe.update(db=db, db_obj=recipe, obj_in=recipe_in)
     return updated_recipe
@@ -107,7 +118,7 @@ async def get_reddit_top_async(subreddit: str, data: dict) -> None:
 
 @router.get("/ideas/async")
 async def fetch_ideas_async(
-    user: User = Depends(deps.get_current_active_superuser)
+    user: User = Depends(deps.get_current_active_superuser),
 ) -> dict:
     data: dict = {}
 
@@ -121,11 +132,9 @@ async def fetch_ideas_async(
 
 
 @router.get("/ideas/")
-def fetch_ideas(
-    reddit_client: RedditClient = Depends(deps.get_reddit_client)
-) -> dict:
+def fetch_ideas(reddit_client: RedditClient = Depends(deps.get_reddit_client)) -> dict:
     data: dict = {}
-    for subreddit in ['recipes', 'easyrecipes', 'TopSecretRecipes']:
+    for subreddit in ["recipes", "easyrecipes", "TopSecretRecipes"]:
         entry = reddit_client.get_reddit_top(subreddit=subreddit)
         data[subreddit] = entry
 

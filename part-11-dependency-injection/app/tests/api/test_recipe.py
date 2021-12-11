@@ -9,4 +9,4 @@ def test_fetch_ideas_reddit_sync(client):
     # Then
     assert response.status_code == 200
     for key in data.keys():
-        assert key in ['recipes', 'easyrecipes', 'TopSecretRecipes']
+        assert key in ["recipes", "easyrecipes", "TopSecretRecipes"]

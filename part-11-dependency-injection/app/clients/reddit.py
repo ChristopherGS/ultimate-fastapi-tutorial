@@ -11,22 +11,23 @@ class RedditClientError(Exception):
 
 
 class RedditClient:
-    base_url: str = 'https://www.reddit.com'
+    base_url: str = "https://www.reddit.com"
     base_error: t.Type[RedditClientError] = RedditClientError
 
-    def __init__(
-        self
-    ) -> None:
+    def __init__(self) -> None:
         self.session = Client()
-        self.session.headers.update({"Content-Type": "application/json",
-                                     "User-agent": "recipe bot 0.1"})
+        self.session.headers.update(
+            {"Content-Type": "application/json", "User-agent": "recipe bot 0.1"}
+        )
 
     def _perform_request(  # type: ignore
         self, method: str, path: str, *args, **kwargs
     ) -> Response:
         res = None
         try:
-            res = getattr(self.session, method)(f"{self.base_url}{path}", *args, **kwargs)
+            res = getattr(self.session, method)(
+                f"{self.base_url}{path}", *args, **kwargs
+            )
             res.raise_for_status()
         except HTTPError:
             raise self.base_error(
@@ -41,8 +42,8 @@ class RedditClient:
         """Fetch the top n entries from a given subreddit."""
 
         # If you get empty responses from the subreddit calls, set t=month instead.
-        url = f'/r/{subreddit}/top.json?sort=top&t=week&limit={limit}'
-        response = self._perform_request('get', url)
+        url = f"/r/{subreddit}/top.json?sort=top&t=week&limit={limit}"
+        response = self._perform_request("get", url)
         subreddit_recipes = response.json()
         subreddit_data = []
         for entry in subreddit_recipes["data"]["children"]:

@@ -20,7 +20,7 @@ async def override_reddit_dependency() -> MagicMock:
         "TopSecretRecipes": [
             "238: Halal guys red sauce - looking for recipe. Tried a recipe from a google search and it wasn’t nearly spicy enough. (https://i.redd.it/516yb30q9u381.jpg)",
             "132: Benihana Diablo Sauce - THE AUTHENTIC RECIPE! (https://www.reddit.com/r/TopSecretRecipes/comments/rbcirf/benihana_diablo_sauce_the_authentic_recipe/)",
-        ]
+        ],
     }
     mock.get_reddit_top.return_value = reddit_stub
     return mock
@@ -29,8 +29,6 @@ async def override_reddit_dependency() -> MagicMock:
 @pytest.fixture()
 def client() -> Generator:
     with TestClient(app) as client:
-        app.dependency_overrides[
-            deps.get_reddit_client
-        ] = override_reddit_dependency
+        app.dependency_overrides[deps.get_reddit_client] = override_reddit_dependency
         yield client
         app.dependency_overrides = {}
