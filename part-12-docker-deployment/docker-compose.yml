@@ -1,0 +1,14 @@
+version: "3"
+services:
+  backend:
+    image: 'ultimate-fastapi-tutorial:${TAG-latest}'
+    environment:
+      # Allow explicit env var override for tests
+      - SMTP_HOST=${SMTP_HOST}
+      - LOG_LEVEL=${LOG_LEVEL}
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        INSTALL_DEV: ${INSTALL_DEV-false}
+

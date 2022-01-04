@@ -1,0 +1,37 @@
+version: "3"
+services:
+  db:
+    image: postgres:14
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./pg-init-scripts:/docker-entrypoint-initdb.d
+      - app-db-data:/var/lib/postgresql/data/pgdata
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_SERVER=db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_MULTIPLE_DATABASES=app,strapi
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "8001:80"
+    volumes:
+      - ./backend/app:/app
+      - ./backend/assets:/assets
+    environment:
+      - POSTGRES_SERVER=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=changethis
+      - POSTGRES_DB=app
+      - BACKEND_CORS_ORIGINS=["http://localhost:3000","http://localhost:8000","https://localhost:3000","https://localhost:8000"]
+      - FIRST_SUPERUSER=admin@api.coursemaker.io
+    command: /start-reload.sh
+volumes:
+  app-db-data:
