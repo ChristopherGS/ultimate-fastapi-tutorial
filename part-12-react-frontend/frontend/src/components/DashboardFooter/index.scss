@@ -1,0 +1,47 @@
+@import '../../assets/styles/variables.scss';
+
+.dashboard-footer {
+  margin-top: 10px;
+  height: 85px;
+  padding: 0 16px;
+
+  > div {
+    width: 100%;
+    display: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+    height: inherit;
+    border-top: 1px solid #EDF1F7;
+  }
+
+  @media (min-width: 992px) {
+    padding: 0 42px;
+  }
+
+  @media (min-width: 1200px) {
+    padding: 0 84px;
+  }
+
+  .navbar-brand {
+    color: #8F9BB3;
+    font-size: 12px;
+    line-height: 15px;
+    span {
+      font-size: 18px;
+      font-family: 'Source Code Pro', monospace;
+      font-weight: 700;
+      color: #00C583;
+    }
+    img {
+      height: 26px;
+      width: auto;
+    }
+  }
+  .navbar-nav {
+    .nav-link {
+      color: #718096;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  }
+}
