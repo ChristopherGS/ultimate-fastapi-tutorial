@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import PublicHeader from "../../components/PublicHeader";
-import PublicFooter from "../../components/PublicFooter";
+import DashboardHeader from "../../components/DashboardHeader";
 import './index.scss';
 import CourseMakerClient from '../../client';
 import config from '../../config';
 import { Helmet } from "react-helmet";
-import { getPageTitle } from '../../helpers/constants';
 import {useSnackbar} from "notistack";
 import logo from "../../logo.svg";
 import Navbar from "react-bootstrap/Navbar";
@@ -18,7 +16,7 @@ const client = new CourseMakerClient(config);
 
 const Login = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [errorCode, setErrorCode] = useState(false);
   const [errorMinLegth, setErrorMinLegth] = useState(false);
@@ -36,7 +34,7 @@ const Login = () => {
       .then(() => {
         client.login(loginForm.email, loginForm.password)
           .then( () => {
-            history.push('/dashboard')
+            navigate('/dashboard')
           })
       })
       .catch( (err) => {
@@ -48,9 +46,9 @@ const Login = () => {
 	return (
     <>
       <Helmet>
-        <title>{getPageTitle('signUp')}</title>
+        <title>{'Sign-up | Recipes - Better than all the REST'}</title>
       </Helmet>
-      <PublicHeader />
+      <DashboardHeader />
 
       <main>
         <section className="py-16 bg-indigo-100 md:py-24">
@@ -88,7 +86,6 @@ const Login = () => {
           </div>
         </section>
       </main>
-      <PublicFooter />
     </>
 	);
 };

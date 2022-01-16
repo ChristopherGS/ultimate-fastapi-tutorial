@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import './index.scss';
@@ -9,11 +9,11 @@ import config from '../../config';
 const client = new CourseMakerClient(config);
 
 function DashboardHeader() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const logout = () => {
     client.logout();
-    history.push('/login');
+    navigate('/login');
   }
   return (
     <Navbar className="dashboard-header">
