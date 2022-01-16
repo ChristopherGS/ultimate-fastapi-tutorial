@@ -40,40 +40,12 @@ const MainView = () => {
 
 const Home = () => {
 
-  const [loggedIn, setLoggedIn] = useState(false);
-
-  const handleLogout = () => {
-    client.logout();
-    setLoggedIn(false)
-  }
-
-  const handleLogin = (username, password) => {
-    client.login(username, password)
-      .then( () => {
-        setLoggedIn(true)
-      })
-      .catch( (err) => {
-        console.log(err);
-        alert("Login failed.")
-      });
-  }
-
-  const handleRegister = (username, password, fullName) => {
-    client.register(username, password, fullName)
-      .then( () => {
-        alert("Register done. Please login")
-        window.location.reload();
-      })
-      .catch( (err) => {
-        console.log(err);
-        alert("Register failed.")
-      });
-  }
+  const [loggedIn, setLoggedIn] = useState(true);
 
   return (
     <>
       <section className="bg-black ">
-        <DashboardHeader />
+        <DashboardHeader loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
         <div className="container px-5 py-12 mx-auto lg:px-20">
           {/*TODO - move to component*/}
           <div className="flex flex-col flex-wrap pb-6 mb-12 text-white ">
@@ -84,12 +56,7 @@ const Home = () => {
               Latest recipes...</p>
 
             <div className="mainViewport">
-              <MainView
-                loginHandler={handleLogin}
-                registerHandler={handleRegister}
-                logoutHandler={handleLogout}
-                loggedIn={loggedIn}
-              />
+              <MainView />
             </div>
           </div>
         </div>

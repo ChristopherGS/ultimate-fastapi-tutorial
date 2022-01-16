@@ -8,13 +8,44 @@ import config from '../../config';
 
 const client = new CourseMakerClient(config);
 
-function DashboardHeader() {
+function DashboardHeader({loggedIn, setLoggedIn}) {
   const navigate = useNavigate();
 
-  const logout = () => {
+  const handleLogout = () => {
     client.logout();
-    navigate('/login');
+    setLoggedIn(false)
   }
+
+  const handleLogin = (username, password) => {
+    client.login(username, password)
+      .then( () => {
+        setLoggedIn(true)
+      })
+      .catch( (err) => {
+        console.log(err);
+        alert("Login failed.")
+      });
+  }
+
+  const handleRegister = (username, password, fullName) => {
+    client.register(username, password, fullName)
+      .then( () => {
+        alert("Register done. Please login")
+        window.location.reload();
+      })
+      .catch( (err) => {
+        console.log(err);
+        alert("Register failed.")
+      });
+  }
+
+  let displayButton;
+  if (loggedIn) {
+      displayButton = <button onClick={() => handleLogout()}>Logout </button>;
+    } else {
+      displayButton = <button onClick={() => handleLogin()}>Login</button>;
+    }
+
   return (
       <nav className="flex items-center justify-between flex-wrap bg-teal-500 p-6">
           <div className="flex items-center flex-shrink-0 text-white mr-6">
@@ -42,12 +73,12 @@ function DashboardHeader() {
                   </a>
                   <a href="https://christophergs.com/python/2021/12/04/fastapi-ultimate-tutorial/"
                      className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
-                      Blog Tutorial
+                      Create Account
                   </a>
               </div>
               <div>
                   <a href="#"
-                     className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Login</a>
+                     className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">{displayButton}</a>
               </div>
           </div>
       </nav>
