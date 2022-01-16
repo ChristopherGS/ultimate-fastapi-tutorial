@@ -11,10 +11,10 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-            <Route path="/" component={Home} />
-            <Route exact path="/my-recipes" component={HomeRedirector} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/sign-up" component={SignUp} />
+            <Route path="/" element={<Home />} />
+            <Route exact path="/my-recipes" element={<HomeRedirector />} />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/sign-up" element={<SignUp />} />
         </Routes>
         <div id="modal-root" />
     </BrowserRouter>

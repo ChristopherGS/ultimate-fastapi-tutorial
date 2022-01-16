@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom'
 import Login from '../login'
 import { Link } from 'react-router-dom';
@@ -91,6 +91,27 @@ class CourseCreator extends React.Component {
   }
 }
 
+
+class CreateCourse extends React.Component {
+  constructor() {
+    super();
+
+    this.goToCourseCreator = this.goToCourseCreator.bind(this)
+  }
+
+  goToCourseCreator() {
+    this.props.tabSwitchHandler("CourseCreator");
+  }
+
+  render() {
+    return (
+      <div className="createCourse">
+        <button onClick={this.goToCourseCreator}>Create New Course </button>
+      </div>
+    )
+  }
+}
+
 class MainView extends React.Component {
   constructor() {
     super();
@@ -124,27 +145,42 @@ class MainView extends React.Component {
 }
 
 
-const Home = () => {
-
-  const [loggedIn, setLoggedIn] = useState(false);
-
-  const handleLogout = () => {
-    client.logout();
-    setLoggedIn(false)
+class Home extends React.Component {
+  constructor() {
+    super();
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
-  const handleLogin = (username, password) => {
+  componentDidMount() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.setState({
+        loggedIn: true
+      });
+    }
+  }
+
+  handleLogout() {
+    client.logout();
+    this.setState({
+      loggedIn: false
+    });
+  }
+
+  handleLogin(username, password) {
     client.login(username, password)
       .then( () => {
-        setLoggedIn(true)
+        this.setState({
+          loggedIn: true
+        });
       })
       .catch( (err) => {
         console.log(err);
         alert("Login failed.")
       });
   }
-
-  const handleRegister = (username, password, fullName) => {
+  handleRegister(username, password, fullName) {
     client.register(username, password, fullName)
       .then( () => {
         alert("Register done. Please login")
@@ -156,24 +192,24 @@ const Home = () => {
       });
   }
 
-  return (
-    <>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1> Course Maker </h1>
-        </header>
-        <div className="mainViewport">
-          <MainView
-            loginHandler={handleLogin}
-            registerHandler={handleRegister}
-            logoutHandler={handleLogout}
-            loggedIn={loggedIn}
-          />
-        </div>
+  render() {
+    return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <h1> Course Maker </h1>
+      </header>
+      <div className="mainViewport">
+        <MainView
+          loginHandler={this.handleLogin}
+          registerHandler={this.handleRegister}
+          logoutHandler={this.handleLogout}
+          loggedIn={this.state.loggedIn}
+        />
       </div>
-    </>
-  )
+    </div>
+  );
+  }
 }
 
 export default Home;
