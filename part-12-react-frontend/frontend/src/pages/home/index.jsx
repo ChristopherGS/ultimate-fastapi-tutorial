@@ -1,108 +1,22 @@
-import React, {useState} from 'react';
-import { useNavigate } from 'react-router-dom'
-import Login from '../login'
-import { Link } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom'
 import CourseMakerClient from '../../client';
 import config from '../../config';
-import { useEffect } from 'react';
 import logo from "../../logo.svg";
+import RecipeTable from "../../components/RecipeTable"
 
 const client = new CourseMakerClient(config);
 
-class TableView extends React.Component {
-  renderTableData() {
-    return this.props.courses.map((course, index) => {
-      const { id, title, description, _status } = course
-      return (
-        <tr key={id}>
-        <td>{id}</td>
-        <td><Link to={`/courses/${id}`} >{title}</Link></td>
-        <td>{description}</td>
-        <td>{_status}</td>
-        </tr>
-      )
-    })
-  }
-  render() {
-    return (
-      <table className="tableView">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.renderTableData()}
-        </tbody>
-      </table>
-    );
-  }
-}
 
-class CourseCreator extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+const MainView = () => {
 
-  handleChange(event) {
-    let state = {};
-    state[event.target.name] = event.target.value;
-    this.setState(state);
-  }
+  const [recipes, setRecipes] = useState([])
 
-  handleSubmit(event) {
-    client.createCourse(this.state)
-      .then(() => {
-      });
-    event.preventDefault();
-  }
+  useEffect(() => {
+    setRecipes(fetchRecipes())
+  }, [])
 
-  render() {
-    return (
-      <>
-      <h2> New Course </h2>
-      <form className="courseCreator" onSubmit={this.handleSubmit}>
-        <div>
-        <label><b>Name</b></label>
-        <input type="text" placeholder="Course Title" name="title" value={this.state.username} onChange={this.handleChange} required/>
-        </div>
-
-        <div>
-        <label><b>Description</b></label>
-        <input type="text" placeholder="Course Description" name="description" value={this.state.password} onChange={this.handleChange} required />
-        </div>
-
-        <div>
-        <button type="submit">Submit</button>
-        <label>
-          <input type="checkbox" checked="checked" name="_status" onChange={this.handleChange} />
-          Create as draft:
-        </label>
-        </div>
-      </form>
-      </>
-    )
-  }
-}
-
-class MainView extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      dataReady: false,
-      courses: null
-    }
-
-    this.fetchRecipes = this.fetchRecipes.bind(this);
-  }
-
-  fetchRecipes() {
+  const fetchRecipes = () => {
     return [
         {
           "label": "Chicken Vesuvio",
@@ -114,13 +28,11 @@ class MainView extends React.Component {
     ]
   }
 
-  render() {
-    return (
-        <CourseCreator
-            fetchCourses={this.fetchCourses}
-        />
-    )
-  }
+  return (
+      <RecipeTable
+          recipes={recipes}
+      />
+  )
 }
 
 
@@ -161,7 +73,7 @@ const Home = () => {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1> Course Maker </h1>
+          <h1> Recipe App - Better Than All The REST </h1>
         </header>
         <div className="mainViewport">
           <MainView
