@@ -40,12 +40,10 @@ const MainView = () => {
 
 const Home = () => {
 
-  const [loggedIn, setLoggedIn] = useState(true);
-
   return (
     <>
       <section className="bg-black ">
-        <DashboardHeader loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+        <DashboardHeader />
         <div className="container px-5 py-12 mx-auto lg:px-20">
           {/*TODO - move to component*/}
           <div className="flex flex-col flex-wrap pb-6 mb-12 text-white ">
@@ -67,17 +65,3 @@ const Home = () => {
 }
 
 export default Home;
-
-
-export const HomeRedirector = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      navigate('/dashboard')
-    } else {
-      navigate('/login');
-    }
-  }, [navigate]);
-  return null;
-}

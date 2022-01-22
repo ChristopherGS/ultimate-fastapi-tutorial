@@ -1,129 +1,24 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom'
-import Login from '../login'
-import { Link } from 'react-router-dom';
-import CourseMakerClient from '../../client';
+import React, {useEffect, useState} from 'react';
+import FastAPIClient from '../../client';
 import config from '../../config';
-import { useEffect } from 'react';
-import logo from "../../logo.svg";
+import DashboardHeader from "../../components/DashboardHeader";
+import Footer from "../../components/Footer";
+import {Link, useNavigate} from "react-router-dom";
+import jwtDecode from "jwt-decode";
+import * as moment from "moment";
+import RecipeTable from "../../components/RecipeTable";
 
-const client = new CourseMakerClient(config);
+const client = new FastAPIClient(config)
 
-class TableView extends React.Component {
-  renderTableData() {
-    return this.props.courses.map((course, index) => {
-      const { id, title, description, _status } = course
-      return (
-        <tr key={id}>
-        <td>{id}</td>
-        <td><Link to={`/courses/${id}`} >{title}</Link></td>
-        <td>{description}</td>
-        <td>{_status}</td>
-        </tr>
-      )
-    })
-  }
-  render() {
-    return (
-      <table className="tableView">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.renderTableData()}
-        </tbody>
-      </table>
-    );
-  }
-}
+const ProfileView = () => {
 
-class CourseCreator extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  const [recipes, setRecipes] = useState([])
 
-  handleChange(event) {
-    let state = {};
-    state[event.target.name] = event.target.value;
-    this.setState(state);
-  }
+  useEffect(() => {
+    setRecipes(fetchRecipes())
+  }, [])
 
-  handleSubmit(event) {
-    client.createCourse(this.state)
-      .then(() => {
-      });
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <>
-      <h2> New Course </h2>
-      <form className="courseCreator" onSubmit={this.handleSubmit}>
-        <div>
-        <label><b>Name</b></label>
-        <input type="text" placeholder="Course Title" name="title" value={this.state.username} onChange={this.handleChange} required/>
-        </div>
-
-        <div>
-        <label><b>Description</b></label>
-        <input type="text" placeholder="Course Description" name="description" value={this.state.password} onChange={this.handleChange} required />
-        </div>
-
-        <div>
-        <button type="submit">Submit</button>
-        <label>
-          <input type="checkbox" checked="checked" name="_status" onChange={this.handleChange} />
-          Create as draft:
-        </label>
-        </div>
-      </form>
-      </>
-    )
-  }
-}
-
-
-class CreateCourse extends React.Component {
-  constructor() {
-    super();
-
-    this.goToCourseCreator = this.goToCourseCreator.bind(this)
-  }
-
-  goToCourseCreator() {
-    this.props.tabSwitchHandler("CourseCreator");
-  }
-
-  render() {
-    return (
-      <div className="createCourse">
-        <button onClick={this.goToCourseCreator}>Create New Course </button>
-      </div>
-    )
-  }
-}
-
-class MainView extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      dataReady: false,
-      courses: null
-    }
-
-    this.fetchRecipes = this.fetchRecipes.bind(this);
-  }
-
-  fetchRecipes() {
+  const fetchRecipes = () => {
     return [
         {
           "label": "Chicken Vesuvio",
@@ -135,95 +30,60 @@ class MainView extends React.Component {
     ]
   }
 
-  render() {
-    return (
-        <CourseCreator
-            fetchCourses={this.fetchCourses}
-        />
-    )
-  }
+  return (
+      <RecipeTable
+          recipes={recipes}
+      />
+  )
 }
 
-
-class Home extends React.Component {
-  constructor() {
-    super();
-    this.handleLogin = this.handleLogin.bind(this);
-    this.handleLogout = this.handleLogout.bind(this);
-  }
-
-  componentDidMount() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      this.setState({
-        loggedIn: true
-      });
-    }
-  }
-
-  handleLogout() {
-    client.logout();
-    this.setState({
-      loggedIn: false
-    });
-  }
-
-  handleLogin(username, password) {
-    client.login(username, password)
-      .then( () => {
-        this.setState({
-          loggedIn: true
-        });
-      })
-      .catch( (err) => {
-        console.log(err);
-        alert("Login failed.")
-      });
-  }
-  handleRegister(username, password, fullName) {
-    client.register(username, password, fullName)
-      .then( () => {
-        alert("Register done. Please login")
-        window.location.reload();
-      })
-      .catch( (err) => {
-        console.log(err);
-        alert("Register failed.")
-      });
-  }
-
-  render() {
-    return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1> Course Maker </h1>
-      </header>
-      <div className="mainViewport">
-        <MainView
-          loginHandler={this.handleLogin}
-          registerHandler={this.handleRegister}
-          logoutHandler={this.handleLogout}
-          loggedIn={this.state.loggedIn}
-        />
-      </div>
-    </div>
-  );
-  }
-}
-
-export default Home;
-
-
-export const HomeRedirector = () => {
+const RecipeDashboard = () => {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      navigate('/dashboard')
-    } else {
-      navigate('/login');
+    const tokenString = localStorage.getItem("token")
+	if (tokenString) {
+        const token = JSON.parse(tokenString)
+        const decodedAccessToken = jwtDecode(token.access_token)
+        const isAccessTokenValid =
+            moment.unix(decodedAccessToken.exp).toDate() > new Date()
+        setIsLoggedIn(true)
     }
-  }, [navigate]);
-  return null;
+  }, [])
+
+  return (
+      <>
+      {!isLoggedIn &&
+        <Link
+            className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white"
+            to={`/login`}>
+            Please Login
+        </Link>
+      }
+      {isLoggedIn &&
+        <section className="bg-black ">
+          <DashboardHeader/>
+          <div className="container px-5 py-12 mx-auto lg:px-20">
+            {/*TODO - move to component*/}
+            <div className="flex flex-col flex-wrap pb-6 mb-12 text-white ">
+              <h1 className="mb-12 text-3xl font-medium text-white">
+                Recipes - Better than all the REST
+              </h1>
+              <p className="text-base leading-relaxed">
+                Latest recipes...</p>
+
+              <div className="mainViewport">
+                <ProfileView/>
+              </div>
+            </div>
+          </div>
+          <Footer/>
+        </section>
+
+      }
+      </>
+  )
 }
+
+export default RecipeDashboard

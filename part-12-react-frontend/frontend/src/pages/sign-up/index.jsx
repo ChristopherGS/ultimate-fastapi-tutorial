@@ -1,93 +1,71 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from 'react-router-dom';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import React, {useState} from 'react';
 import DashboardHeader from "../../components/DashboardHeader";
-import './index.scss';
+import {useNavigate} from "react-router-dom";
 import CourseMakerClient from '../../client';
 import config from '../../config';
-import { Helmet } from "react-helmet";
-import {useSnackbar} from "notistack";
-import logo from "../../logo.svg";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
 
 const client = new CourseMakerClient(config);
 
-const Login = () => {
-  const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
+const SignUp = () => {
   const [error, setError] = useState(false);
-  const [errorCode, setErrorCode] = useState(false);
-  const [errorMinLegth, setErrorMinLegth] = useState(false);
-  const [loginForm, setLoginForm] = useState({ full_name: '', email: '', password: '', code: '', accept: false });
+  const [registerForm, setRegisterForm] = useState({ email: '', password: '', fullName: '' });
+  const navigate = useNavigate()
 
-  const onLogin = (e) => {
+  const onRegister = (e) => {
     e.preventDefault();
-    if(loginForm.password.length < 8) {
-      return setErrorMinLegth(true)
-    }
-    setErrorMinLegth(false);
-    setErrorCode(false);
     setError(false);
-    client.register(loginForm.email, loginForm.password, loginForm.full_name)
-      .then(() => {
-        client.login(loginForm.email, loginForm.password)
-          .then( () => {
-            navigate('/dashboard')
-          })
+    if ( !registerForm.email || !registerForm.password || !registerForm.fullName ) {
+      alert('Please fill out all form fields')
+    }
+    client.register(registerForm.email, registerForm.password, registerForm.fullName)
+      .then( () => {
+        navigate('/my-recipes')
       })
       .catch( (err) => {
-        // usually email address taken
-        enqueueSnackbar(err.response.data.detail, { variant: 'error', autoHideDuration: 10000 });
         setError(true);
+        alert(err)
       });
   }
-	return (
-    <>
-      <Helmet>
-        <title>{'Sign-up | Recipes - Better than all the REST'}</title>
-      </Helmet>
-      <DashboardHeader />
 
-      <main>
-        <section className="py-16 bg-indigo-100 md:py-24">
-          <div className="container">
-            <div className="login-title">Please Create an Account</div>
-            <p className="login-subtitle">14 Day Free Trial (no credit card required)</p>
-            <Form className="login-form bg-white rounded-lg shadow-lg" onSubmit={onLogin}>
-              <Form.Group>
-                <Form.Label>Full name</Form.Label>
-                <Form.Control placeholder="Enter full name" value={loginForm.full_name} onChange={(e) => setLoginForm({...loginForm, full_name: e.target.value })}/>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" value={loginForm.email} onChange={(e) => setLoginForm({...loginForm, email: e.target.value })}/>
-              </Form.Group>
-
-              <Form.Group>
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" value={loginForm.password} onChange={(e) => setLoginForm({...loginForm, password: e.target.value })}/>
-              </Form.Group>
-              <Form.Group>
-                <Form.Check type="checkbox" checked={loginForm.accept} onChange={(e) => setLoginForm({...loginForm, accept: e.target.checked })}  label={<>Agree to <a rel="noopener noreferrer" target="_blank" href="https://coursemaker.org/terms/">terms and conditions</a> & subscribe to reasonable email updates (you can unsubscribe anytime)</>} />
-              </Form.Group>
-              {error && <div className="err-mess-login">Sign up failed. Please try again</div>}
-              {errorCode && <div className="err-mess-login">Please enter valid beta code</div>}
-              {errorMinLegth && <div className="err-mess-login">Password min length is 8 characters</div>}
-              <Button disabled={!loginForm.accept || !loginForm.full_name || !loginForm.email || !loginForm.password || !loginForm.password} className="full-width mt-10" size="lg" variant="medium-green" type="submit">
-                Sign up
-              </Button>
-            </Form>
-            <div className="no-account text-center">
-              <span>Already have an account? </span>
-              <Link className="sign-up-text" to="/login">Log In</Link>
-            </div>
+  return (
+      <>
+      <section className="bg-black ">
+        <DashboardHeader />
+        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+          <div className="px-8 py-6 mt-4 text-left bg-white shadow-lg">
+            <h3 className="text-2xl font-bold text-center">Create your account</h3>
+            <form action="">
+              <div className="mt-4">
+                <div>
+                  <label className="block" htmlFor="email">Email</label>
+                    <input type="text" placeholder="Email" value={registerForm.email} onChange={(e) => setRegisterForm({...registerForm, email: e.target.value })}
+                           className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600">
+                    </input>
+                </div>
+                <div className="mt-4">
+                  <label className="block">Full Name</label>
+                    <input type="text" placeholder="name" value={registerForm.fullName} onChange={(e) => setRegisterForm({...registerForm, fullName: e.target.value })}
+                           className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600">
+                    </input>
+                </div>
+                <div className="mt-4">
+                  <label className="block">Password</label>
+                    <input type="password" placeholder="Password" value={registerForm.password} onChange={(e) => setRegisterForm({...registerForm, password: e.target.value })}
+                           className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600">
+                    </input>
+                </div>
+                <div className="flex items-baseline justify-between">
+                  <button className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900" onClick={(e) => onRegister(e)}>Sign Up</button>
+                </div>
+              </div>
+            </form>
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
     </>
-	);
-};
+  )
+}
 
-export default Login;
+export default SignUp;
+
+

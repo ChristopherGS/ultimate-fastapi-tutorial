@@ -1,47 +1,41 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
 import './index.scss';
-import CourseMakerClient from '../../client';
+import FastAPIClient from '../../client';
 import config from '../../config';
+import jwtDecode from "jwt-decode";
+import * as moment from "moment";
 
-const client = new CourseMakerClient(config);
+const client = new FastAPIClient(config);
 
-function DashboardHeader({loggedIn, setLoggedIn}) {
+function DashboardHeader() {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const tokenString = localStorage.getItem("token")
+	if (tokenString) {
+        const token = JSON.parse(tokenString)
+        const decodedAccessToken = jwtDecode(token.access_token)
+        const isAccessTokenValid =
+            moment.unix(decodedAccessToken.exp).toDate() > new Date()
+        setIsLoggedIn(true)
+    }
+  }, [])
 
   const handleLogout = () => {
     client.logout();
-    setLoggedIn(false)
+    setIsLoggedIn(false)
+    navigate('/')
   }
 
-  const handleLogin = (username, password) => {
-    client.login(username, password)
-      .then( () => {
-        setLoggedIn(true)
-      })
-      .catch( (err) => {
-        console.log(err);
-        alert("Login failed.")
-      });
-  }
-
-  const handleRegister = (username, password, fullName) => {
-    client.register(username, password, fullName)
-      .then( () => {
-        alert("Register done. Please login")
-        window.location.reload();
-      })
-      .catch( (err) => {
-        console.log(err);
-        alert("Register failed.")
-      });
+  const handleLogin = () => {
+    navigate("/login");
   }
 
   let displayButton;
-  if (loggedIn) {
-      displayButton = <button onClick={() => handleLogout()}>Logout </button>;
+  if (isLoggedIn) {
+      displayButton = <button onClick={() => handleLogout()}>Logout</button>;
     } else {
       displayButton = <button onClick={() => handleLogin()}>Login</button>;
     }
@@ -71,10 +65,11 @@ function DashboardHeader({loggedIn, setLoggedIn}) {
                      className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
                       API Docs
                   </a>
-                  <a href="https://christophergs.com/python/2021/12/04/fastapi-ultimate-tutorial/"
-                     className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
+                  <Link
+                      className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white"
+                      to={`/sign-up`}>
                       Create Account
-                  </a>
+                  </Link>
               </div>
               <div>
                   <a href="#"

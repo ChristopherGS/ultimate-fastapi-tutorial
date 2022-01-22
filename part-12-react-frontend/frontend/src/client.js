@@ -33,10 +33,9 @@ class FastAPIClient {
 		}
 
 		return this.apiClient
-			.post("/login/access-token", form_data)
+			.post("/auth/login", form_data)
 			.then((resp) => {
 				localStorage.setItem("token", JSON.stringify(resp.data))
-				this.cmsClient = this.getCmsClient(this.config)
 				this.apiClient = this.getApiClient(this.config)
 				return this.fetchUser()
 			})
@@ -49,7 +48,7 @@ class FastAPIClient {
 		})
 	}
 
-	register(email, password, fullName, code) {
+	register(email, password, fullName) {
 		const loginData = {
 			email,
 			password,
@@ -57,16 +56,14 @@ class FastAPIClient {
 			is_active: true,
 		}
 
-		return this.apiClient.post("/users/signup", loginData).then((resp) => {
-			return resp.data
+		return this.apiClient.post("/auth/signup", loginData).then(
+			(resp) => {
+				return resp.data
 		})
 	}
 
 	// Logging out is just deleting the jwt.
 	logout(username, password) {
-		if (this.cmsClient) {
-			delete this.cmsClient.defaults.headers["Authorization"]
-		}
 		// Add here any other data that needs to be deleted from local storage
 		// on logout
 		localStorage.removeItem("token")
@@ -86,11 +83,11 @@ class FastAPIClient {
 	}
 
 	getRecipe(recipeId) {
-		return this.cmsClient.get(`/recipes/${recipeId}`)
+		return this.apiClient.get(`/recipes/${recipeId}`)
 	}
 
-	deleteRecipe(recipe) {
-		return this.apiClient.delete(`/recipes/${course.id}`)
+	deleteRecipe(recipeId) {
+		return this.apiClient.delete(`/recipes/${recipeId}`)
 	}
 }
 

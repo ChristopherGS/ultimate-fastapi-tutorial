@@ -79,7 +79,6 @@ def update_recipe(
     *,
     recipe_in: RecipeUpdateRestricted,
     db: Session = Depends(deps.get_db),
-    current_user: User = Depends(deps.get_current_user),
 ) -> dict:
     """
     Update recipe in the database.
@@ -90,12 +89,13 @@ def update_recipe(
             status_code=400, detail=f"Recipe with ID: {recipe_in.id} not found."
         )
 
-    if recipe.submitter_id != current_user.id:
-        raise HTTPException(
-            status_code=403, detail=f"You can only update your recipes."
-        )
+    # if recipe.submitter_id != current_user.id:
+    #     raise HTTPException(
+    #         status_code=403, detail=f"You can only update your recipes."
+    #     )
 
     updated_recipe = crud.recipe.update(db=db, db_obj=recipe, obj_in=recipe_in)
+    db.commit()
     return updated_recipe
 
 
