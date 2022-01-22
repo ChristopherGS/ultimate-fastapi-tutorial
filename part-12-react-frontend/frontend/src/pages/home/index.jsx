@@ -15,19 +15,13 @@ const MainView = () => {
   const [recipes, setRecipes] = useState([])
 
   useEffect(() => {
-    setRecipes(fetchRecipes())
+    fetchExampleRecipes()
   }, [])
 
-  const fetchRecipes = () => {
-    return [
-        {
-          "label": "Chicken Vesuvio",
-          "source": "Serious Eats",
-          "url": "http://www.seriouseats.com/recipes/2011/12/chicken-vesuvio-recipe.html",
-          "id": 1,
-          "submitter_id": 1
-        }
-    ]
+  const fetchExampleRecipes = () => {
+    client.getSampleRecipes('chicken').then((data) => {
+      setRecipes(data?.results)
+    })
   }
 
   return (
@@ -51,7 +45,7 @@ const Home = () => {
               Recipes - Better than all the REST
             </h1>
             <p className="text-base leading-relaxed">
-              Latest recipes...</p>
+              Sample recipes...</p>
 
             <div className="mainViewport">
               <MainView />

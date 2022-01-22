@@ -61,9 +61,13 @@ function DashboardHeader() {
           </div>
           <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
               <div className="text-sm lg:flex-grow">
-                  <a href="http://localhost:8001"
+                  <a href="http://localhost:8001/docs"
                      className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
                       API Docs
+                  </a>
+                  <a href="/my-recipes"
+                     className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
+                      My Recipes
                   </a>
                   <Link
                       className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white"
