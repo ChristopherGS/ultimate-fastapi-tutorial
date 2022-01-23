@@ -60,7 +60,7 @@ jobs:
           name: Deploy Frontend
           command: |
             sudo curl https://cli-assets.heroku.com/install.sh | sh
-            cd part-13-docker-deployment && make deploy-frontend-heroku
+            make -C ./part-13-docker-deployment deploy-frontend-heroku
 
 workflows:
   version: 2
