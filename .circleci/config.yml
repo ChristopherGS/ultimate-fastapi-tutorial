@@ -51,7 +51,7 @@ jobs:
 
   part_13_deploy_frontend:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:17.4.0
     working_directory: ~/project
     steps:
       - checkout:
@@ -75,8 +75,8 @@ workflows:
               only:
                 - part-12-a-docker-deploy
       - part_13_deploy_frontend:
-          requires:
-            - part_13_deploy_app_container_to_heroku
+#          requires:
+#            - part_13_deploy_app_container_to_heroku
           filters:
             branches:
               only:
