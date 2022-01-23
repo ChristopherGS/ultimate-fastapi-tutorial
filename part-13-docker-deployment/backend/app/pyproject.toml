@@ -17,7 +17,7 @@ tenacity = "~8.0.1"
 httpx = "~0.18.1"
 passlib = {extras = ["bcrypt"], version = "^1.7.2"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-gunicorn = "^20.1.0"
+psycopg2-binary = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
