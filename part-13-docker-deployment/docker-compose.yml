@@ -4,7 +4,7 @@ services:
     image: 'ultimate-fastapi-tutorial:${TAG-latest}'
     environment:
       - SQLALCHEMY_DATABASE_URI=${DATABASE_URL}  # heroku postgres evar
-      - BACKEND_CORS_ORIGINS=["http://localhost:3000","http://localhost:8000"]
+      - BACKEND_CORS_ORIGINS=["http://localhost:3000","http://localhost:8000", "https://fastapi-recipe-app-frontend.herokuapp.com"]
       - FIRST_SUPERUSER=admin@example.com
       - PORT=${PORT}
     build:

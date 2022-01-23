@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Heroku postgres addon
+export SQLALCHEMY_DATABASE_URI=${DATABASE_URL}
+
 # If there's a prestart.sh script in the /app directory or other path specified, run it before starting
 PRE_START_PATH=${PRE_START_PATH:-/app/prestart.sh}
 echo "Checking for script in $PRE_START_PATH"
@@ -14,8 +17,6 @@ export APP_MODULE=${APP_MODULE-app.main:app}
 export HOST=${HOST:-0.0.0.0}
 export PORT=${PORT:-8001}
 
-# Heroku postgres addon
-export DATABASE_URL=${DATABASE_URL}
-echo "DB URL: $DATABASE_URL"
+
 
 exec uvicorn --reload --host $HOST --port $PORT "$APP_MODULE"
