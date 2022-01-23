@@ -1,14 +1,21 @@
 version: "3"
 services:
-  backend:
+  web:
     image: 'ultimate-fastapi-tutorial:${TAG-latest}'
     environment:
-      # Allow explicit env var override for tests
-      - SMTP_HOST=${SMTP_HOST}
-      - LOG_LEVEL=${LOG_LEVEL}
+      - POSTGRES_SERVER=${POSTGRES_SERVER}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - BACKEND_CORS_ORIGINS=["http://localhost:3000","http://localhost:8000"]
+      - FIRST_SUPERUSER=admin@example.com
+      - PORT=${PORT}
     build:
       context: ./backend
       dockerfile: Dockerfile
       args:
         INSTALL_DEV: ${INSTALL_DEV-false}
+    # Mount your code as a volume to avoid image rebuilds
+    volumes:
+      - ./webapp:/opt/webapp
 

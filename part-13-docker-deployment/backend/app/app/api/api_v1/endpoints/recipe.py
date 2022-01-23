@@ -39,6 +39,23 @@ def fetch_recipe(
     return result
 
 
+@router.get("/my-recipes/", status_code=200, response_model=RecipeSearchResults)
+def fetch_user_recipes(
+    *,
+    db: Session = Depends(deps.get_db),
+    current_user: User = Depends(deps.get_current_user),
+) -> Any:
+    """
+    Fetch a single recipe by ID
+    """
+    recipes = current_user.recipes
+    print(recipes)
+    if not recipes:
+        return {"results": list()}
+
+    return {"results": list(recipes)}
+
+
 @router.get("/search/", status_code=200, response_model=RecipeSearchResults)
 def search_recipes(
     *,

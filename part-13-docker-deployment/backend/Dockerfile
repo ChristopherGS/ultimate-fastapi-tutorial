@@ -1,4 +1,4 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
+FROM python:3.9
 
 WORKDIR /app/
 
@@ -17,5 +17,10 @@ ARG INSTALL_DEV=false
 RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install --no-root ; else poetry install --no-root --no-dev ; fi"
 
 COPY ./app /app
+RUN chmod +x run.sh
 
 ENV PYTHONPATH=/app
+
+# Run the run script, it will check for an /app/prestart.sh script (e.g. for migrations)
+# And then will start Uvicorn
+CMD ["./run.sh"]
