@@ -4,6 +4,7 @@ from pathlib import Path
 from fastapi import FastAPI, APIRouter, Request, Depends
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
+from fastapi.middleware.cors import CORSMiddleware
 
 from app import crud
 from app.api import deps
@@ -15,6 +16,17 @@ TEMPLATES = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 
 root_router = APIRouter()
 app = FastAPI(title="Recipe API", openapi_url=f"{settings.API_V1_STR}/openapi.json")
+
+# Set all CORS enabled origins
+if settings.BACKEND_CORS_ORIGINS:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+        allow_origin_regex=settings.BACKEND_CORS_ORIGIN_REGEX,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 
 @root_router.get("/", status_code=200)
