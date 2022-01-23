@@ -23,7 +23,7 @@ jobs:
       - run:
           name: Runnning app tests
           command: |
-            PYTHONPATH=. poetry run pytest app/app/tests
+            PYTHONPATH=. poetry run pytest app/tests
 
   part_13_deploy_app_container_to_heroku:
     <<: *defaults
