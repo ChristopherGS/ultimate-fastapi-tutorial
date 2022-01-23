@@ -1,0 +1,50 @@
+@import '../../assets/styles/variables.scss';
+
+.dashboard-header {
+  z-index: 999;
+  height: 64px;
+  background: $white;
+  box-shadow: 0 2px 11px 0 $lightGrey;
+
+  @media (min-width: 992px) {
+    padding: 0 42px;
+  }
+
+  @media (min-width: 1200px) {
+    padding: 0 84px;
+  }
+
+  .navbar-brand {
+    color: #00C583;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 0;
+    img {
+      height: 35px;
+      width: auto;
+    }
+  }
+  .navbar-nav {
+    .nav-link {
+      color: #00C583;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  }
+
+  .avatar {
+    box-sizing: border-box;
+    height: 36px;
+    width: 36px;
+    border: 2px solid #00C583;
+    border-radius: 50%;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}
