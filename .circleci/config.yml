@@ -26,27 +26,30 @@ jobs:
             PYTHONPATH=. poetry run pytest app/tests
 
   part_13_deploy_app_container_to_heroku:
-    <<: *defaults
+    docker:
+      - image: circleci/node:14
+    working_directory: ~/project
     steps:
-      - setup_remote_docker:
-          # Supported versions: https://circleci.com/docs/2.0/building-docker-images/#docker-version
-          version: 20.10.6
       - checkout:
           path: ~/project
       - run:
-          name: Build image
+          name: Deploy Frontend
           command: |
             sudo curl https://cli-assets.heroku.com/install.sh | sh
-            cd part-13-docker-deployment && make build-app-heroku
+            cd part-13-docker-deployment && make deploy-frontend-heroku
+
+
+  part_13_deploy_frontend:
+    <<: *defaults
+    working_directory: ~/project/part-13-docker-deployment/backend/app
+    steps:
+      - checkout:
+          path: ~/project
+      - *prepare_venv
       - run:
-          name: Push Image to Heroku
+          name: Runnning app tests
           command: |
-            # Push the built container to the Heroku image registry
-            cd part-13-docker-deployment && make push-app-heroku
-      - run:
-          name: Release to Heroku
-          command: |
-            cd part-13-docker-deployment && make release-heroku
+            PYTHONPATH=. poetry run pytest app/tests
 
 workflows:
   version: 2
@@ -56,6 +59,13 @@ workflows:
       - part_13_deploy_app_container_to_heroku:
           requires:
             - part_13_test_backend
+          filters:
+            branches:
+              only:
+                - part-12-a-docker-deploy
+      - part_13_deploy_frontend:
+          requires:
+            - part_13_deploy_app_container_to_heroku
           filters:
             branches:
               only:
