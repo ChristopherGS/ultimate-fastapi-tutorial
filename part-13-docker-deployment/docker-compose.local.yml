@@ -26,11 +26,7 @@ services:
       - ./backend/app:/app
       - ./backend/assets:/assets
     environment:
-      - POSTGRES_SERVER=db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=app
+      - DATABASE_URL=postgresql://db
       - BACKEND_CORS_ORIGINS=["http://localhost:3000","http://localhost:8000"]
-      - FIRST_SUPERUSER=admin@example.com
 volumes:
   app-db-data:
