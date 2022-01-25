@@ -105,7 +105,7 @@ class FastAPIClient {
 			source,
 			submitter_id: submitter_id
 		}
-		return this.apiClient.post(`/recipes`, recipeData)
+		return this.apiClient.post(`/recipes/`, recipeData)
 	}
 
 	deleteRecipe(recipeId) {
