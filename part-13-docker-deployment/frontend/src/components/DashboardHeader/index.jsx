@@ -67,14 +67,18 @@ function DashboardHeader() {
         </div>
         <div className={`animate-fade-in-down w-full ${toggleMenu ? "block" : "hidden"} flex-grow lg:flex lg:items-center lg:w-auto`}>
             <div className="text-sm lg:flex-grow">
-                <a href="/docs"
+                <Link to="/docs"
                     className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mx-4">
                     API Docs
-                </a>
-                <a href="/my-recipes"
+                </Link>
+                <Link to="/ideas"
+                    className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mx-4">
+                    Ideas
+                </Link>
+                <Link to="/my-recipes"
                     className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mx-4">
                     My Recipes
-                </a>
+                </Link>
                 {!isLoggedIn && <Link
                     className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white"
                     to={`/sign-up`}>
