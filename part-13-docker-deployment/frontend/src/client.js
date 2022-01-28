@@ -36,7 +36,6 @@ class FastAPIClient {
 			.post("/auth/login", form_data)
 			.then((resp) => {
 				localStorage.setItem("token", JSON.stringify(resp.data))
-				this.apiClient = this.getApiClient(this.config)
 				return this.fetchUser()
 			})
 	}
@@ -128,8 +127,7 @@ function localStorageTokenInterceptor(config) {
 		if (isAccessTokenValid) {
 			headers["Authorization"] = `Bearer ${token.access_token}`
 		} else {
-			// const decodedRefreshToken = jwtDecode(token.refresh_token);
-			// const isRefreshTokenValid = moment.unix(decodedRefreshToken.exp).toDate() > new Date();
+			alert('Your login session has expired')
 		}
 	}
 	config["headers"] = headers
