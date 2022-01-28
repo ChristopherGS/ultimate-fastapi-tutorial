@@ -118,7 +118,7 @@ class FastAPIClient {
 			id: id,
 			label: label,
 		}
-		return this.apiClient.post(`/recipes`, recipeData)
+		return this.apiClient.post(`/recipes/`, recipeData)
 	}
 
 	deleteRecipe(recipeId) {
