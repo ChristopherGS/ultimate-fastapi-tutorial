@@ -85,7 +85,13 @@ class FastAPIClient {
 		return this.apiClient.get(`/recipes/${recipeId}`)
 	}
 
-	getSampleRecipes(keyword) {
+	getIdeas() {
+		return this.apiClient.get(`/recipes/ideas/`).then(({data}) => {
+			return data
+		})
+	}
+
+	getRecipes(keyword) {
 		return this.apiClient.get(`/recipes/search/?keyword=${keyword}&max_results=10`).then(({data}) => {
 			return data
 		})
@@ -105,6 +111,14 @@ class FastAPIClient {
 			submitter_id: submitter_id
 		}
 		return this.apiClient.post(`/recipes/`, recipeData)
+	}
+
+	updateRecipe(id, label) {
+		const recipeData = {
+			id: id,
+			label: label,
+		}
+		return this.apiClient.post(`/recipes`, recipeData)
 	}
 
 	deleteRecipe(recipeId) {
