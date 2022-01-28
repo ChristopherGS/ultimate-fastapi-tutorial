@@ -73,9 +73,6 @@ const Ideas = () => {
 						<div className="flex flex-row justify-center w-full">
 							<div className="w-full md:w-2/3 mb-5">
 								<div className="sm:hidden">
-									<label for="tabs" className="sr-only text-white">
-										Select your country
-									</label>
 									<select
 										id="tabs"
                     onChange={(e) => setActiveTab(e.target.value)}
