@@ -11,6 +11,7 @@ import Loader from '../../components/Loader';
 const client = new CourseMakerClient(config);
 
 
+
 const Home = () => {
 
   const [loading, setLoading] = useState(true)
@@ -26,7 +27,6 @@ const Home = () => {
     fetchRecipes()
   }, [])
 
-
   const fetchRecipes = (search) => {
 
     if(keyword.current?.length <= 0 && search)
@@ -40,10 +40,9 @@ const Home = () => {
       setLoading(false)
 
       // SET THE RECIPIES DATA
-      setRecipes(data?.results)
-    });
-  }
-
+  const fetchExampleRecipes = () => {
+    client.getSampleRecipes('chicken').then((data) => {
+      setLoading(false)
 
   if(loading)
     return <Loader />
@@ -52,7 +51,6 @@ const Home = () => {
     <>
       <section className="bg-black ">
         <DashboardHeader />
-
         <div className="container px-5 py-12 mx-auto lg:px-20">
           
           <div className="flex flex-col flex-wrap pb-6 mb-12 text-white ">
@@ -80,6 +78,7 @@ const Home = () => {
             </div>
           </div>
         </div>
+        
         <Footer />
       </section>
     </>
