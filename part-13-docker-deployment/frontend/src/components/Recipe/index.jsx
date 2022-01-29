@@ -1,8 +1,4 @@
-import { useState } from "react";
-import FormInput from "../FormInput/FormInput";
-import PopupModal from "../Modal/PopupModal";
-
-const Recipe = ({ recipe, showUpdate, showRecipeInfoModal, onClick }) => {
+const Recipe = ({ recipe,  showRecipeInfoModal }) => {
 	return (
 		recipe && (
 			<>
@@ -40,19 +36,11 @@ const Recipe = ({ recipe, showUpdate, showRecipeInfoModal, onClick }) => {
 								<span>View Recipe </span>
 							</h1>
 							<div className="flex flex-col md:flex-row">
-								{showUpdate && (
-									<button
-										onClick={(e) => {onClick(); e.stopPropagation()}}
-										className="mr-2 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 w-full bg-green-600 cursor-pointer hover:bg-green-700 text-white font-bold px-4 py-2 mx-auto mt-3 rounded"
-									>
-										{/* className="w-full px-4 py-2 mx-auto mt-3 text-white transition duration-500 ease-in-out transform border border-gray-900 rounded-lg text-md hover:bg-gray-900 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 focus:border-gray-700 focus:bg-gray-800 "> */}
-										Update
-									</button>
-								)}
+								
 								<a
 									href={`${recipe?.url}`}
 									onClick={(e) => e.stopPropagation()}
-									className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 w-full bg-teal-600 cursor-pointer hover:bg-teal-700 text-white font-bold px-4 py-2 mx-auto mt-3 rounded"
+									className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110  bg-teal-600 cursor-pointer hover:bg-teal-700 text-white font-bold px-4 py-2 mx-auto mt-3 rounded"
 								>
 									{/* className="w-full px-4 py-2 mx-auto mt-3 text-white transition duration-500 ease-in-out transform border border-gray-900 rounded-lg text-md hover:bg-gray-900 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 focus:border-gray-700 focus:bg-gray-800 "> */}
 									Visit Site

@@ -7,7 +7,6 @@ import { HomeRedirector } from "./pages/home";
 import Home from "./pages/home";
 import RecipeDashboard from "./pages/my-recipes";
 import ErrorPage from "./pages/error-page";
-import Ideas from "./pages/ideas";
 
 function App() {
 	return (
@@ -18,7 +17,6 @@ function App() {
 					<Route exact path="/my-recipes" element={<RecipeDashboard />} />
 					<Route exact path="/login" element={<Login />} />
 					<Route exact path="/sign-up" element={<SignUp />} />
-					<Route exact path="/ideas" element={<Ideas />} />
 					<Route exact={true} path="*" element={<ErrorPage />} />
 				</Routes>
 			</BrowserRouter>

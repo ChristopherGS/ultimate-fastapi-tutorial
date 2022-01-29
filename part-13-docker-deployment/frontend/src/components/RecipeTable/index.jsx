@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import PopupModal from "../Modal/PopupModal";
 import FormInput from "../FormInput/FormInput";
 
-const RecipeTable = ({recipes, onClick, showUpdate}) => {
+const RecipeTable = ({recipes}) => {
 
   const [recipeInfoModal, setRecipeInfoModal] = useState(false)
 
@@ -12,7 +12,7 @@ const RecipeTable = ({recipes, onClick, showUpdate}) => {
         <div className="sections-list">
           {recipes.length && (
               recipes.map((recipe, i) => (
-                <Recipe showRecipeInfoModal={() => setRecipeInfoModal(recipe)} key={recipe.id} recipe={recipe} showUpdate={showUpdate} onClick={() => onClick && onClick(recipe)} />
+                <Recipe showRecipeInfoModal={() => setRecipeInfoModal(recipe)} key={recipe.id} recipe={recipe}  />
               ))
           )}
           {!recipes.length && (

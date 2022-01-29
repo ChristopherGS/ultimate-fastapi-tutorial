@@ -71,10 +71,6 @@ function DashboardHeader() {
                     className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mx-4">
                     API Docs
                 </Link>
-                <Link to="/ideas"
-                    className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mx-4">
-                    Ideas
-                </Link>
                 <Link to="/my-recipes"
                     className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mx-4">
                     My Recipes
