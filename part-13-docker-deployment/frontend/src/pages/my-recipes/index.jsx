@@ -3,7 +3,7 @@ import FastAPIClient from "../../client";
 import config from "../../config";
 import DashboardHeader from "../../components/DashboardHeader";
 import Footer from "../../components/Footer";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import * as moment from "moment";
 import RecipeTable from "../../components/RecipeTable";
@@ -55,9 +55,8 @@ const RecipeDashboard = () => {
 		});
 	};
 
-   const  urlPatternValidation = URL => {
-        const regex = new RegExp('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?');    
-        console.log("url",regex.test(URL))
+   const urlPatternValidation = URL => {
+        const regex = new RegExp('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?');
           return regex.test(URL);
         };
 
@@ -120,7 +119,7 @@ const RecipeDashboard = () => {
 			>
 				<DashboardHeader />
 				<div className="container px-5 pt-6 text-center mx-auto lg:px-20">
-					{/*TODO - move to component*/}
+						{/*TODO - move to component*/}
 					<h1 className="mb-12 text-3xl font-medium text-white">
 						Recipes - Better than all the REST
 					</h1>

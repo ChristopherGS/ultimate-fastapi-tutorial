@@ -13,7 +13,7 @@ const Home = () => {
 
      const [loading, setLoading] = useState(true)
      const [recipes, setRecipes] = useState([])
-     const [serachValue, setSearchValue] = useState("")
+     const [searchValue, setSearchValue] = useState("chicken")
 
      useEffect(() => {
           // FETCH THE RECIPIES
@@ -23,14 +23,14 @@ const Home = () => {
 
      const fetchRecipes = (search) => {
 
-          if (serachValue?.length <= 0 && search)
+          if (searchValue?.length <= 0 && search)
                return alert("Please Enter Search Text")
 
           // SET THE LOADER TO TURE
           setLoading(true)
 
           // GET THE RECIPIES FROM THE API
-          client.getRecipes(serachValue || "chicken").then((data) => {
+          client.getRecipes(searchValue).then((data) => {
                setLoading(false)
 
                // SET THE RECIPIES DATA
@@ -59,7 +59,7 @@ const Home = () => {
                                         <input
                                              type="text"
                                              onChange={(e) => setSearchValue(e.target.value)}
-                                             className={`text-teal-500 z-20 hover:text-teal-700 h-14 w-full max-w-xs m-auto pr-8 pl-5 rounded z-0 focus:shadow focus:outline-none`} placeholder="Search anything..." />
+                                             className={`text-teal-500 z-20 hover:text-teal-700 h-14 w-full max-w-xs m-auto pr-8 pl-5 rounded z-0 focus:shadow focus:outline-none`} placeholder="Search recipes..." />
                                         <div className="absolute top-2 right-2">
                                              <button onClick={() => fetchRecipes(true)} className="h-10 w-20 text-white rounded bg-teal-500 hover:bg-teal-600">Search</button>
                                         </div>
