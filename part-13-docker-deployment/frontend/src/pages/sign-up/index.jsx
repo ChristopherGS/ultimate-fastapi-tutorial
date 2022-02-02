@@ -39,7 +39,7 @@ const SignUp = () => {
 
     client.register(registerForm.email, registerForm.password, registerForm.fullName)
       .then( () => {
-        navigate('/my-recipes')
+        navigate('/login')
       })
       .catch( (err) => {
         setLoading(false)
