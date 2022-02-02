@@ -1,13 +1,12 @@
 import React from 'react';
-import './index.scss';
 
 function Footer() {
 
   return (
-      <footer>
-          <div className={"text-center p-4"}>
+      <footer className={"text-center p-4 bg-black mt-auto text-white"}>
+          <div >
             © 2022 Copyright:
-            <a className="text-white" href="https://christophergs.com/">Recipe API - Better than all the REST</a>
+            <a className="text-white ml-5" href="https://christophergs.com/">Recipe API - Better than all the REST</a>
           </div>
       </footer>
   );

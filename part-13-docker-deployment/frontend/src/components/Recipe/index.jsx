@@ -1,3 +1,5 @@
+import React from "react";
+
 const Recipe = ({ recipe,  showRecipeInfoModal }) => {
 	return (
 		recipe && (

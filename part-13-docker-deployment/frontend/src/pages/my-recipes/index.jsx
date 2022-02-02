@@ -3,7 +3,6 @@ import FastAPIClient from "../../client";
 import config from "../../config";
 import DashboardHeader from "../../components/DashboardHeader";
 import Footer from "../../components/Footer";
-import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import * as moment from "moment";
 import RecipeTable from "../../components/RecipeTable";
@@ -29,7 +28,6 @@ const ProfileView = ({ recipes }) => {
 };
 
 const RecipeDashboard = () => {
-	const navigate = useNavigate();
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [error, setError] = useState({ label: "", url: "", source: "" });
 	const [recipeForm, setRecipeForm] = useState({
@@ -90,7 +88,8 @@ const RecipeDashboard = () => {
 					recipeForm.source,
 					user?.id
 				)
-				.then((data) => {
+				// eslint-disable-next-line no-unused-vars
+				.then((data) => {  // eslint:ignore
 					fetchUserRecipes();
 					setLoading(false);
 					setShowForm(false);

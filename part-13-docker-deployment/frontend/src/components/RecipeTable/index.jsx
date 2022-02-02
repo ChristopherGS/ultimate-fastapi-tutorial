@@ -11,7 +11,7 @@ const RecipeTable = ({recipes}) => {
       <>
         <div className="sections-list">
           {recipes.length && (
-              recipes.map((recipe, i) => (
+              recipes.map((recipe) => (
                 <Recipe showRecipeInfoModal={() => setRecipeInfoModal(recipe)} key={recipe.id} recipe={recipe}  />
               ))
           )}
