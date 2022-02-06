@@ -73,11 +73,9 @@ workflows:
           filters:
             branches:
               only:
-                - part-12-a-docker-deploy
+                - main
       - part_13_deploy_frontend:
-#          requires:
-#            - part_13_deploy_app_container_to_heroku
           filters:
             branches:
               only:
-                - part-12-a-docker-deploy
+                - main
