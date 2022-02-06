@@ -3,9 +3,19 @@ from unittest.mock import MagicMock
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 from app.main import app
 from app.api import deps
+
+
+# test_database.py
+TEST_SQLALCHEMY_DATABASE_URL = "sqlite:///test.db"
+
+engine = create_engine(TEST_SQLALCHEMY_DATABASE_URL)
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 
 async def override_reddit_dependency() -> MagicMock:
@@ -26,9 +36,18 @@ async def override_reddit_dependency() -> MagicMock:
     return mock
 
 
+async def override_get_db():
+    try:
+        db = TestingSessionLocal()
+        yield db
+    finally:
+        db.close()
+
+
 @pytest.fixture()
 def client() -> Generator:
     with TestClient(app) as client:
         app.dependency_overrides[deps.get_reddit_client] = override_reddit_dependency
+        app.dependency_overrides[deps.get_db] = override_get_db
         yield client
         app.dependency_overrides = {}
