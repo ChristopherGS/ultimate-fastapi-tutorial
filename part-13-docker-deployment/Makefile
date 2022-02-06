@@ -1,5 +1,6 @@
 # Update the Heroku names to match yours
-# Add the HEROKU_API_KEY to your CI env vars
+# Add the HEROKU_API_KEY environment variable to your system
+# (and to your CI tool env vars if running in CI)
 HEROKU_APP_NAME=fastapi-recipe-app
 HEROKU_FRONTEND_APP_NAME=fastapi-recipe-app-frontend
 COMMIT_ID=$(shell git rev-parse HEAD)

@@ -1,16 +1,24 @@
 version: "3"
 services:
   db:
-    image: postgres:14
+    image: postgres:14  # https://hub.docker.com/_/postgres
     ports:
       - "5433"
     volumes:
-      - ./pg-init-scripts:/docker-entrypoint-initdb.d
       - app-db-data:/var/lib/postgresql/data/pgdata
     environment:
+      # This optional variable can be used to define another location -
+      # like a subdirectory - for the database files.
       - PGDATA=/var/lib/postgresql/data/pgdata
       - POSTGRES_SERVER=db
-      - POSTGRES_USER=user
+      # This optional environment variable is used in conjunction with POSTGRES_PASSWORD
+      # to set a user and its password. This variable will create the specified user with superuser
+      # power and a database with the same name. If it is not specified, then the default user of
+      # postgres will be used.
+      - POSTGRES_USER=postgres
+      # This environment variable is required for you to use the PostgreSQL image.
+      # It must not be empty or undefined. This environment variable sets the superuser
+      # password for PostgreSQL. The default superuser is defined by the POSTGRES_USER environment variable.
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=app
 
@@ -26,7 +34,8 @@ services:
       - ./backend/app:/app
       - ./backend/assets:/assets
     environment:
-      - DATABASE_URL=postgresql://db
+      - DATABASE_URL=postgresql://postgres:password@db:5432/app
+      - DATABASE_TEST_URL=postgresql://postgres:password@db:5432/app_test
       - BACKEND_CORS_ORIGINS=["http://localhost:3000","http://localhost:8000"]
 volumes:
   app-db-data:
