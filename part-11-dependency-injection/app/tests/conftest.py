@@ -26,7 +26,7 @@ async def override_reddit_dependency() -> MagicMock:
     return mock
 
 
-@pytest.fixture()
+@pytest.fixture
 def client() -> Generator:
     with TestClient(app) as client:
         app.dependency_overrides[deps.get_reddit_client] = override_reddit_dependency
