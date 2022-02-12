@@ -134,5 +134,6 @@ async def fetch_ideas_async(
 
 @router.get("/ideas/")
 def fetch_ideas(reddit_client: RedditClient = Depends(deps.get_reddit_client)) -> dict:
-    return {key: reddit_client.get_reddit_top(subreddit=key)
-            for key in RECIPE_SUBREDDITS}
+    return {
+        key: reddit_client.get_reddit_top(subreddit=key) for key in RECIPE_SUBREDDITS
+    }
