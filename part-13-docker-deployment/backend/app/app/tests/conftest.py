@@ -17,7 +17,6 @@ engine = create_engine(TEST_SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-
 async def override_reddit_dependency() -> MagicMock:
     mock = MagicMock()
     reddit_stub = {

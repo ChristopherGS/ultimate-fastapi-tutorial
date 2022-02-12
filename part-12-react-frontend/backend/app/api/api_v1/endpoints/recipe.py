@@ -17,6 +17,7 @@ from app.schemas.recipe import (
 from app.models.user import User
 
 router = APIRouter()
+RECIPE_SUBREDDITS = ["recipes", "easyrecipes", "TopSecretRecipes"]
 
 
 @router.get("/{recipe_id}", status_code=200, response_model=Recipe)
@@ -150,9 +151,6 @@ async def fetch_ideas_async(
 
 @router.get("/ideas/")
 def fetch_ideas(reddit_client: RedditClient = Depends(deps.get_reddit_client)) -> dict:
-    data: dict = {}
-    for subreddit in ["recipes", "easyrecipes", "TopSecretRecipes"]:
-        entry = reddit_client.get_reddit_top(subreddit=subreddit)
-        data[subreddit] = entry
-
-    return data
+    return {
+        key: reddit_client.get_reddit_top(subreddit=key) for key in RECIPE_SUBREDDITS
+    }
