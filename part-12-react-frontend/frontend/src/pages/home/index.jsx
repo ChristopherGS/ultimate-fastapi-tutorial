@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import CourseMakerClient from '../../client';
+import FastAPIClient from '../../client';
 import config from '../../config';
 import RecipeTable from "../../components/RecipeTable"
 import DashboardHeader from "../../components/DashboardHeader";
 import Footer from "../../components/Footer";
 import Loader from '../../components/Loader';
 
-const client = new CourseMakerClient(config);
+const client = new FastAPIClient(config);
 
 
 const Home = () => {
