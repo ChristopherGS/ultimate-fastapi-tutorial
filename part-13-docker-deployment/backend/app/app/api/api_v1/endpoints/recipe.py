@@ -47,7 +47,7 @@ def fetch_user_recipes(
     current_user: User = Depends(deps.get_current_user),
 ) -> Any:
     """
-    Fetch a single recipe by ID
+    Fetch all recipes for a user
     """
     recipes = current_user.recipes
     print(recipes)
