@@ -9,7 +9,8 @@ class Ideas:
 
     def fetch_ideas(self) -> dict:
         return {
-            key: self.reddit_client.get_reddit_top(subreddit=key) for key in RECIPE_SUBREDDITS
+            key: self.reddit_client.get_reddit_top(subreddit=key)
+            for key in RECIPE_SUBREDDITS
         }
 
 

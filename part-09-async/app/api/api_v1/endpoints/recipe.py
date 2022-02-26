@@ -10,6 +10,7 @@ from app.api import deps
 from app.schemas.recipe import Recipe, RecipeCreate, RecipeSearchResults
 
 router = APIRouter()
+RECIPE_SUBREDDITS = ["recipes", "easyrecipes", "TopSecretRecipes"]
 
 
 @router.get("/{recipe_id}", status_code=200, response_model=Recipe)
@@ -60,7 +61,7 @@ def create_recipe(
     return recipe
 
 
-async def get_reddit_top_async(subreddit: str, data: dict) -> None:
+async def get_reddit_top_async(subreddit: str) -> list:
     async with httpx.AsyncClient() as client:
         response = await client.get(
             f"https://www.reddit.com/r/{subreddit}/top.json?sort=top&t=day&limit=5",
@@ -74,10 +75,10 @@ async def get_reddit_top_async(subreddit: str, data: dict) -> None:
         title = entry["data"]["title"]
         link = entry["data"]["url"]
         subreddit_data.append(f"{str(score)}: {title} ({link})")
-    data[subreddit] = subreddit_data
+    return subreddit_data
 
 
-def get_reddit_top(subreddit: str, data: dict) -> None:
+def get_reddit_top(subreddit: str) -> list:
     response = httpx.get(
         f"https://www.reddit.com/r/{subreddit}/top.json?sort=top&t=day&limit=5",
         headers={"User-agent": "recipe bot 0.1"},
@@ -89,27 +90,17 @@ def get_reddit_top(subreddit: str, data: dict) -> None:
         title = entry["data"]["title"]
         link = entry["data"]["url"]
         subreddit_data.append(f"{str(score)}: {title} ({link})")
-    data[subreddit] = subreddit_data
+    return subreddit_data
 
 
 @router.get("/ideas/async")
 async def fetch_ideas_async() -> dict:
-    data: dict = {}
-
-    await asyncio.gather(
-        get_reddit_top_async("recipes", data),
-        get_reddit_top_async("easyrecipes", data),
-        get_reddit_top_async("TopSecretRecipes", data),
+    results = await asyncio.gather(
+        *[get_reddit_top_async(subreddit=subreddit) for subreddit in RECIPE_SUBREDDITS]
     )
-
-    return data
+    return dict(zip(RECIPE_SUBREDDITS, results))
 
 
 @router.get("/ideas/")
 def fetch_ideas() -> dict:
-    data: dict = {}
-    get_reddit_top("recipes", data)
-    get_reddit_top("easyrecipes", data)
-    get_reddit_top("TopSecretRecipes", data)
-
-    return data
+    return {key: get_reddit_top(subreddit=key) for key in RECIPE_SUBREDDITS}

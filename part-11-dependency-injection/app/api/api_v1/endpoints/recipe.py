@@ -100,7 +100,7 @@ def update_recipe(
     return updated_recipe
 
 
-async def get_reddit_top_async(subreddit: str, data: dict) -> None:
+async def get_reddit_top_async(subreddit: str) -> list:
     async with httpx.AsyncClient() as client:
         response = await client.get(
             f"https://www.reddit.com/r/{subreddit}/top.json?sort=top&t=day&limit=5",
@@ -114,22 +114,17 @@ async def get_reddit_top_async(subreddit: str, data: dict) -> None:
         title = entry["data"]["title"]
         link = entry["data"]["url"]
         subreddit_data.append(f"{str(score)}: {title} ({link})")
-    data[subreddit] = subreddit_data
+    return subreddit_data
 
 
 @router.get("/ideas/async")
 async def fetch_ideas_async(
     user: User = Depends(deps.get_current_active_superuser),
 ) -> dict:
-    data: dict = {}
-
-    await asyncio.gather(
-        get_reddit_top_async("recipes", data),
-        get_reddit_top_async("easyrecipes", data),
-        get_reddit_top_async("TopSecretRecipes", data),
+    results = await asyncio.gather(
+        *[get_reddit_top_async(subreddit=subreddit) for subreddit in RECIPE_SUBREDDITS]
     )
-
-    return data
+    return dict(zip(RECIPE_SUBREDDITS, results))
 
 
 @router.get("/ideas/")
