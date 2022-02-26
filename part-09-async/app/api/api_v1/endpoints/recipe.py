@@ -95,14 +95,12 @@ def get_reddit_top(subreddit: str) -> list:
 
 @router.get("/ideas/async")
 async def fetch_ideas_async() -> dict:
-    results = await asyncio.gather(*[
-        get_reddit_top_async(subreddit=subreddit) for subreddit in RECIPE_SUBREDDITS
-    ])
+    results = await asyncio.gather(
+        *[get_reddit_top_async(subreddit=subreddit) for subreddit in RECIPE_SUBREDDITS]
+    )
     return dict(zip(RECIPE_SUBREDDITS, results))
 
 
 @router.get("/ideas/")
 def fetch_ideas() -> dict:
-    return {
-        key: get_reddit_top(subreddit=key) for key in RECIPE_SUBREDDITS
-    }
+    return {key: get_reddit_top(subreddit=key) for key in RECIPE_SUBREDDITS}

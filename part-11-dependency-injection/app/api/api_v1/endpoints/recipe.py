@@ -121,9 +121,9 @@ async def get_reddit_top_async(subreddit: str, data: dict) -> None:
 async def fetch_ideas_async(
     user: User = Depends(deps.get_current_active_superuser),
 ) -> dict:
-    results = await asyncio.gather(*[
-        get_reddit_top_async(subreddit=subreddit) for subreddit in RECIPE_SUBREDDITS
-    ])
+    results = await asyncio.gather(
+        *[get_reddit_top_async(subreddit=subreddit) for subreddit in RECIPE_SUBREDDITS]
+    )
     return dict(zip(RECIPE_SUBREDDITS, results))
 
 
