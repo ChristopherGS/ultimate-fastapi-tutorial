@@ -18,3 +18,7 @@ ImportError: libffi.so.6: cannot open shared object file: No such file or direct
 Fix:
 Reinstall Python so that libffi.so.6 is updated as [described in this SO answer](https://stackoverflow.com/questions/61875869/ubuntu-20-04-upgrade-python-missing-libffi-so-6)
 
+
+### Poetry Issues on Windows
+
+Make sure you use the downloadable Python install and **not** the Python install from the Microsoft Store.
