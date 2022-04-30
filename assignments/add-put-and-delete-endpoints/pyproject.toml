@@ -1,0 +1,12 @@
+[tool.poetry]
+name = "app"
+version = "0.0.1"
+description = "Ultimate FastAPI Tutorial Part 4"
+authors = ["ChristopherGS"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+uvicorn = "~0.11.3"
+fastapi = "~0.68.0"
+python-multipart = "~0.0.5"
+pydantic = {extras = ["email"], version = "~1.8.1"}

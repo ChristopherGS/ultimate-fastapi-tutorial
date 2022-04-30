@@ -10,6 +10,8 @@ from app import deps
 from app import crud
 
 
+# Project Directories
+ROOT = Path(__file__).resolve().parent.parent
 BASE_PATH = Path(__file__).resolve().parent
 TEMPLATES = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 
