@@ -37,12 +37,12 @@ jobs:
           name: Build image
           command: |
             sudo curl https://cli-assets.heroku.com/install.sh | sh
-            cd part-14-docker-deployment && make build-app-heroku
+            cd part-14-send-email-in-background && make build-app-heroku
       - run:
           name: Push Image to Heroku
           command: |
             # Push the built container to the Heroku image registry
-            cd part-14-docker-deployment && make push-app-heroku
+            cd part-14-send-email-in-background && make push-app-heroku
       - run:
           name: Release to Heroku
           command: |
