@@ -1,4 +1,6 @@
-## Part 11 Local Setup
+## Part 14 Local Setup
+
+(Non-Docker)
 
 1. `pip install poetry`
 2. Install dependencies `cd` into the directory where the `pyproject.toml` is located then `poetry install`
@@ -7,3 +9,4 @@ have made breaking DB migration changes. `rm example.db`. If you're starting her
 4. Run the DB migrations via poetry `poetry run ./prestart.sh` (only required once)
 5. Run the FastAPI server via poetry `poetry run ./run.sh`
 6. Open http://localhost:8001/
+

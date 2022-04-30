@@ -1,0 +1,8 @@
+# Files ignored when building docker images:
+# https://docs.docker.com/engine/reference/builder/#dockerignore-file
+.venv
+venv
+env
+.dockerignore
+Dockerfile
+frontend/
