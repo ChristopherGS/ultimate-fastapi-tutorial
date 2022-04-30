@@ -35,7 +35,8 @@ def get_email_client() -> EmailClient:
     config = MailGunConfig(
         API_KEY=settings.email.MAILGUN_API_KEY,
         DOMAIN_NAME=settings.email.MAILGUN_DOMAIN_NAME,
-        BASE_URL=settings.email.MAILGUN_BASE_URL)
+        BASE_URL=settings.email.MAILGUN_BASE_URL,
+    )
     return EmailClient(config=config)
 
 

@@ -15,6 +15,8 @@ from app.core.auth import (
 from app.models.user import User
 from app.clients.email import EmailClient
 from app.core.email import send_registration_confirmed_email
+from app.core.config import settings
+
 
 router = APIRouter()
 

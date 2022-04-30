@@ -18,9 +18,9 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
 class EmailSettings(BaseSettings):
-    MAILGUN_API_KEY: str = 'update me'
-    MAILGUN_DOMAIN_NAME: str = 'update me'
-    MAILGUN_BASE_URL: str = 'https://api.mailgun.net/v3/'
+    MAILGUN_API_KEY: str = "update me"
+    MAILGUN_DOMAIN_NAME: str = "update me"
+    MAILGUN_BASE_URL: str = "https://api.mailgun.net/v3/"
     SEND_REGISTRATION_EMAILS: bool = True
 
 
@@ -70,7 +70,7 @@ class Settings(BaseSettings):
     class Config:
         case_sensitive = True
         env_file = ".env"
-        env_file_encoding = 'utf-8'
+        env_file_encoding = "utf-8"
 
 
 def setup_app_logging(config: Settings) -> None:

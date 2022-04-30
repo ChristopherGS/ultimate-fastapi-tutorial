@@ -29,10 +29,9 @@ class MailGunSendData(BaseModel):
 
 
 class EmailClient:
-
     def __init__(self, config: MailGunConfig) -> None:
         self.config = config
-        self.base_url: str = self.config.BASE_URL 
+        self.base_url: str = self.config.BASE_URL
         self.base_error: t.Type[EmailClientError] = EmailClientError
         self.session = Client(auth=("api", str(self.config.API_KEY)))
 
@@ -58,9 +57,7 @@ class EmailClient:
         data = data.dict()
 
         # expected MailGun dict keys conflict with python from keyword
-        data['from'] = data.pop('from_')
+        data["from"] = data.pop("from_")
         return self._perform_request(
-            method='post',
-            path=f'{self.config.DOMAIN_NAME}/messages',
-            data=data)
- 
+            method="post", path=f"{self.config.DOMAIN_NAME}/messages", data=data
+        )
