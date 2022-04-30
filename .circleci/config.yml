@@ -70,10 +70,10 @@ workflows:
       - part_14_deploy_app_container_to_heroku:
           requires:
             - part_14_test_backend
-          filters:
-            branches:
-              only:
-                - main
+          # filters:
+          #   branches:
+          #     only:
+          #       - main
       - part_14_deploy_frontend:
           filters:
             branches:

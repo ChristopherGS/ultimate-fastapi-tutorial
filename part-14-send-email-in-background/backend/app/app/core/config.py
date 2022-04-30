@@ -18,8 +18,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
 class EmailSettings(BaseSettings):
-    MAILGUN_API_KEY: str
-    MAILGUN_DOMAIN_NAME: str
+    MAILGUN_API_KEY: str = 'update me'
+    MAILGUN_DOMAIN_NAME: str = 'update me'
     MAILGUN_BASE_URL: str = 'https://api.mailgun.net/v3/'
     SEND_REGISTRATION_EMAILS: bool = True
 
