@@ -9,11 +9,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from app import crud
 from app.api import deps
 from app.api.api_v1.api import api_router
-from app.core.config import settings
+from app.core.config import settings, setup_app_logging
 
 BASE_PATH = Path(__file__).resolve().parent
 TEMPLATES = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 
+
+setup_app_logging(config=settings)
 root_router = APIRouter()
 app = FastAPI(title="Recipe API", openapi_url=f"{settings.API_V1_STR}/openapi.json")
 
@@ -60,7 +62,5 @@ app.include_router(root_router)
 if __name__ == "__main__":
     # Use this for debugging purposes only
     import uvicorn
-    import sys
-    print(sys.path)
 
     uvicorn.run(app, host="0.0.0.0", port=8001, log_level="debug")

@@ -19,6 +19,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.2"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 psycopg2-binary = "^2.9.3"
 gunicorn = "^20.1.0"
+loguru = "^0.6.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

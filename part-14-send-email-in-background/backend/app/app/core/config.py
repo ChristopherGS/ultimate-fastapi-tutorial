@@ -1,24 +1,37 @@
+import logging
 import pathlib
+import sys
 
 from dotenv import load_dotenv
+from loguru import logger
 from pydantic import AnyHttpUrl, BaseSettings, EmailStr, validator
 from typing import List, Optional, Union
 
+from app.core.logging import InterceptHandler
+
 
 load_dotenv()
+
+
+# Project Directories
+ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
 class EmailSettings(BaseSettings):
     MAILGUN_API_KEY: str
     MAILGUN_DOMAIN_NAME: str
     MAILGUN_BASE_URL: str = 'https://api.mailgun.net/v3/'
-    SEND_EMAILS: bool = False
+    SEND_REGISTRATION_EMAILS: bool = True
 
 
 class DBSettings(BaseSettings):
-    SQLALCHEMY_DATABASE_URI: str = "postgres://"
+    SQLALCHEMY_DATABASE_URI: str = "sqlite:///example.db"
     FIRST_SUPERUSER: EmailStr = "admin@recipeapi.com"
     FIRST_SUPERUSER_PW: str = "CHANGEME"
+
+
+class LoggingSettings(BaseSettings):
+    LOGGING_LEVEL: int = logging.INFO  # logging levels are ints
 
 
 class Settings(BaseSettings):
@@ -52,11 +65,25 @@ class Settings(BaseSettings):
 
     db: DBSettings = DBSettings()
     email: EmailSettings = EmailSettings()
+    logging: LoggingSettings = LoggingSettings()
 
     class Config:
         case_sensitive = True
         env_file = ".env"
         env_file_encoding = 'utf-8'
+
+
+def setup_app_logging(config: Settings) -> None:
+    """Prepare custom logging for our application."""
+    LOGGERS = ("uvicorn.asgi", "uvicorn.access")
+    logging.getLogger().handlers = [InterceptHandler()]
+    for logger_name in LOGGERS:
+        logging_logger = logging.getLogger(logger_name)
+        logging_logger.handlers = [InterceptHandler(level=config.logging.LOGGING_LEVEL)]
+
+    logger.configure(
+        handlers=[{"sink": sys.stderr, "level": config.logging.LOGGING_LEVEL}]
+    )
 
 
 settings = Settings()

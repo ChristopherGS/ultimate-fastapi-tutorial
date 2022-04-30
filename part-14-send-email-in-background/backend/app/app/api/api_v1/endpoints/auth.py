@@ -1,7 +1,8 @@
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from fastapi.security import OAuth2PasswordRequestForm
+from loguru import logger
 from sqlalchemy.orm.session import Session
 
 from app import crud
@@ -13,6 +14,7 @@ from app.core.auth import (
 )
 from app.models.user import User
 from app.clients.email import EmailClient
+from app.core.email import send_registration_confirmed_email
 
 router = APIRouter()
 
@@ -50,6 +52,7 @@ def create_user_signup(
     *,
     db: Session = Depends(deps.get_db),
     email_client: EmailClient = Depends(deps.get_email_client),
+    background_tasks: BackgroundTasks,
     user_in: schemas.user.UserCreate,
 ) -> Any:
     """
@@ -63,6 +66,11 @@ def create_user_signup(
             detail="The user with this email already exists in the system",
         )
     user = crud.user.create(db=db, obj_in=user_in)
-    email_client.send
+
+    if settings.email.SEND_REGISTRATION_EMAILS:
+        # Trigger email (asynchronous)
+        background_tasks.add_task(
+            send_registration_confirmed_email, user=user, client=email_client
+        )
 
     return user

@@ -1,6 +1,7 @@
 import typing as t
 
 from httpx import Client, Response, HTTPError
+from loguru import logger
 from pydantic import BaseModel
 
 
@@ -12,7 +13,7 @@ class EmailClientError(Exception):
 
 
 class EmailClientConfig(BaseModel):
-    BASE_URL: str = "https://api.mailgun.net/v3/"
+    BASE_URL: str = "https://api.mailgun.net/v3"
 
 
 class MailGunConfig(EmailClientConfig):
@@ -21,7 +22,7 @@ class MailGunConfig(EmailClientConfig):
 
 
 class MailGunSendData(BaseModel):
-    from_: str = 'test@test.com'
+    from_: str
     to: t.List[str]
     subject: str
     text: str
@@ -33,11 +34,7 @@ class EmailClient:
         self.config = config
         self.base_url: str = self.config.BASE_URL 
         self.base_error: t.Type[EmailClientError] = EmailClientError
-        self.session = Client()
-        self.session.headers.update(
-            {"Content-Type": "application/json",
-             "auth": ('api', self.config.API_KEY)}
-        )
+        self.session = Client(auth=("api", str(self.config.API_KEY)))
 
     def _perform_request(  # type: ignore
         self, method: str, path: str, *args, **kwargs
@@ -61,9 +58,9 @@ class EmailClient:
         data = data.dict()
 
         # expected MailGun dict keys conflict with python from keyword
-        data['from'] = dictionary.pop('from_')
+        data['from'] = data.pop('from_')
         return self._perform_request(
             method='post',
-            path=f'{self.base_url}/{self.config.DOMAIN_NAME}/messages',
-            data=data.dict())
+            path=f'{self.config.DOMAIN_NAME}/messages',
+            data=data)
  
