@@ -9,4 +9,4 @@ python = ">=3.8,<3.12"
 uvicorn = "~0.11.3"
 fastapi = "^0.104.0"
 python-multipart = "~0.0.5"
-pydantic = {extras = ["email"], version = ">=1.10"}
+pydantic = {extras = ["email"], version = ">=2.0"}
