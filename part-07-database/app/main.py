@@ -5,9 +5,9 @@ from typing import Optional, Any
 from pathlib import Path
 from sqlalchemy.orm import Session
 
-from app.schemas.recipe import RecipeSearchResults, Recipe, RecipeCreate
-from app import deps
-from app import crud
+from schemas.recipe import RecipeSearchResults, Recipe, RecipeCreate
+import deps
+import crud
 
 
 # Project Directories
@@ -62,7 +62,7 @@ def fetch_recipe(
 @api_router.get("/search/", status_code=200, response_model=RecipeSearchResults)
 def search_recipes(
     *,
-    keyword: Optional[str] = Query(None, min_length=3, example="chicken"),
+    keyword: Optional[str] = Query(None, min_length=3, examples="chicken"),
     max_results: Optional[int] = 10,
     db: Session = Depends(deps.get_db),
 ) -> dict:

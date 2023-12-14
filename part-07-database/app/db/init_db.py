@@ -1,9 +1,9 @@
 import logging
 from sqlalchemy.orm import Session
 
-from app import crud, schemas
-from app.db import base  # noqa: F401
-from app.recipe_data import RECIPES
+import crud, schemas
+from db import base  # noqa: F401
+from recipe_data import RECIPES
 
 logger = logging.getLogger(__name__)
 
