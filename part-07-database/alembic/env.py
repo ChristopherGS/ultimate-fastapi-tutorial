@@ -17,12 +17,14 @@ fileConfig(config.config_file_name)
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 # target_metadata = None
+import os, sys;
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_DIR)
 
 from app.db.base import Base  # noqa
 from app.db.session import SQLALCHEMY_DATABASE_URI
 
 target_metadata = Base.metadata
-
 
 def get_url():
     return SQLALCHEMY_DATABASE_URI
