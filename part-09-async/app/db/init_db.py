@@ -1,9 +1,9 @@
 import logging
 from sqlalchemy.orm import Session
 
-from app import crud, schemas
-from app.db import base  # noqa: F401
-from app.core.config import settings
+import crud, schemas
+from db import base  # noqa: F401
+from core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -44,8 +44,9 @@ def init_db(db: Session) -> None:
         user = crud.user.get_by_email(db, email=settings.FIRST_SUPERUSER)
         if not user:
             user_in = schemas.UserCreate(
-                full_name="Initial Super User",
-                email=f"{settings.FIRST_SUPERUSER}",
+                first_name="First_name",
+                surname="Surname",
+                email=settings.FIRST_SUPERUSER,
                 is_superuser=True,
             )
             user = crud.user.create(db, obj_in=user_in)  # noqa: F841
