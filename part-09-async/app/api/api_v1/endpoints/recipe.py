@@ -5,9 +5,9 @@ import httpx
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
-from app import crud
-from app.api import deps
-from app.schemas.recipe import Recipe, RecipeCreate, RecipeSearchResults
+import crud
+from api import deps
+from schemas.recipe import Recipe, RecipeCreate, RecipeSearchResults
 
 router = APIRouter()
 RECIPE_SUBREDDITS = ["recipes", "easyrecipes", "TopSecretRecipes"]
