@@ -4,7 +4,8 @@ import sys
 
 from dotenv import load_dotenv
 from loguru import logger
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, validator
+from pydantic import AnyHttpUrl, EmailStr, validator
+from pydantic_settings import BaseSettings
 from typing import List, Optional, Union
 
 from app.core.logging import InterceptHandler
