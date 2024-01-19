@@ -38,7 +38,7 @@ def fetch_recipe(*, recipe_id: int) -> dict:
 @api_router.get("/search/", status_code=200, response_model=RecipeSearchResults)
 def search_recipes(
     *,
-    keyword: Optional[str] = Query(None, min_length=3, example="chicken"),
+    keyword: Optional[str] = Query(None, min_length=3, examples="chicken"),
     max_results: Optional[int] = 10
 ) -> dict:
     """
