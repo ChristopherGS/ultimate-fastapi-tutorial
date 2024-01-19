@@ -17,9 +17,10 @@ ENV ENVIRONMENT prod
 ENV TESTING 0
 
 # Install Poetry
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
+RUN pip install poetry && \
+    #curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
     cd /usr/local/bin && \
-    ln -s /opt/poetry/bin/poetry && \
+    #ln -s /opt/poetry/bin/poetry && \
     poetry config virtualenvs.create false
 
 # Copy poetry.lock* in case it doesn't exist in the repo
