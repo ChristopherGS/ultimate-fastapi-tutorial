@@ -37,6 +37,6 @@ services:
       - DATABASE_URL=postgresql://postgres:password@db:5432/app
       - DATABASE_TEST_URL=postgresql://postgres:password@db:5432/app_test
       - BACKEND_CORS_ORIGINS=["http://localhost:3000","http://localhost:8000"]
-      - 
+
 volumes:
   app-db-data:
